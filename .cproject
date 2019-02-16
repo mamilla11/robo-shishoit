@@ -12,15 +12,15 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="com.atollic.truestudio.exe.debug.1736391990" name="Debug" parent="com.atollic.truestudio.exe.debug">
+				<configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="com.atollic.truestudio.exe.debug.1736391990" name="Debug" parent="com.atollic.truestudio.exe.debug" postannouncebuildStep="" postbuildStep="" preannouncebuildStep="" prebuildStep="">
 					<folderInfo id="com.atollic.truestudio.exe.debug.1736391990." name="/" resourcePath="">
-						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.324114650" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain">
+						<toolChain errorParsers="" id="com.atollic.truestudio.exe.debug.toolchain.324114650" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain">
 							<option id="com.atollic.truestudio.general.runtimelib.619305803" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib" useByScannerDiscovery="false" value="com.atollic.truestudio.ld.general.cclib.CCSmallCSmall" valueType="enumerated"/>
 							<option id="com.atollic.truestudio.toolchain_options.mcu.998862146" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu" useByScannerDiscovery="false" value="STM32F103C6" valueType="string"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.1978110976" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor" useByScannerDiscovery="false" value="STMicroelectronics" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform.1134298055" isAbstract="false" name="Debug platform" osList="all" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
-							<builder buildPath="${workspace_loc:/robo-shishoit}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=C:\\Program Files (x86)\\Atollic\\TrueSTUDIO for STM32 9.2.0\\ARMTools\\bin|" id="com.atollic.truestudio.mbs.builder1.1366367171" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="com.atollic.truestudio.mbs.builder1"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.693703002" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as">
+							<builder buildPath="${workspace_loc:/robo-shishoit}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=C:\\Program Files (x86)\\Atollic\\TrueSTUDIO for STM32 9.2.0\\ARMTools\\bin|" errorParsers="" id="com.atollic.truestudio.mbs.builder1.1366367171" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="com.atollic.truestudio.mbs.builder1"/>
+							<tool command="arm-atollic-eabi-gcc -c" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.as.693703002" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as">
 								<option id="com.atollic.truestudio.common_options.target.endianess.419594204" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.577916600" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32F103C6" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.instr_set.909875900" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
@@ -32,22 +32,19 @@
 								</option>
 								<option id="com.atollic.truestudio.as.general.incpath.341988129" name="Include path" superClass="com.atollic.truestudio.as.general.incpath" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../src"/>
-									<listOptionValue builtIn="false" value="../Libraries/STM32F10x_StdPeriph_Driver/inc"/>
-									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Device/ST/STM32F10x/Include"/>
-									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 								</option>
 								<inputType id="com.atollic.truestudio.as.input.1137336928" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1059427270" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc">
+							<tool command="arm-atollic-eabi-gcc -c" commandLinePattern="${COMMAND} ${INPUTS} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.gcc.1059427270" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc">
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1132453399" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F10X_LD"/>
 									<listOptionValue builtIn="false" value="USE_STDPERIPH_DRIVER"/>
+									<listOptionValue builtIn="false" value="STM32F1"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.883396124" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="../src"/>
-									<listOptionValue builtIn="false" value="../Libraries/STM32F10x_StdPeriph_Driver/inc"/>
-									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Device/ST/STM32F10x/Include"/>
-									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.671222747" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.966222881" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32F103C6" valueType="enumerated"/>
@@ -66,8 +63,9 @@
 								<option id="com.atollic.truestudio.common_options.target.fpu.1936712517" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu"/>
 								<option id="com.atollic.truestudio.ld.general.scriptfile.1357651980" name="Linker script" superClass="com.atollic.truestudio.ld.general.scriptfile" value="../stm32_flash.ld" valueType="string"/>
 								<option id="com.atollic.truestudio.ld.optimization.do_garbage.1529479170" name="Dead code removal " superClass="com.atollic.truestudio.ld.optimization.do_garbage" value="true" valueType="boolean"/>
+								<option id="com.atollic.truestudio.ld.misc.genmapfile.263753162" name="Create map file" superClass="com.atollic.truestudio.ld.misc.genmapfile"/>
 							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.1872588190" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp">
+							<tool command="arm-atollic-eabi-g++ -c" commandLinePattern="${COMMAND} ${INPUTS} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.gpp.1872588190" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp">
 								<option id="com.atollic.truestudio.gpp.symbols.defined.1985302711" name="Defined symbols" superClass="com.atollic.truestudio.gpp.symbols.defined" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F10X_LD"/>
 									<listOptionValue builtIn="false" value="STM32F1"/>
@@ -86,9 +84,11 @@
 								<option id="com.atollic.truestudio.gpp.optimization.prep_data.586375471" name="Prepare dead data removal" superClass="com.atollic.truestudio.gpp.optimization.prep_data" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.gpp.optimization.fno_rtti.1828492567" name="Disable RTTI" superClass="com.atollic.truestudio.gpp.optimization.fno_rtti" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.gpp.optimization.fno_exceptions.1337702180" name="Disable exception handling" superClass="com.atollic.truestudio.gpp.optimization.fno_exceptions" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="com.atollic.truestudio.gpp.cppstandard.1081361268" name="C++ standard" superClass="com.atollic.truestudio.gpp.cppstandard" useByScannerDiscovery="false" value="com.atollic.truestudio.gpp.cppstandard.gnupp14" valueType="enumerated"/>
+								<option id="com.atollic.truestudio.gpp.misc.otherflags.682098099" name="Other options" superClass="com.atollic.truestudio.gpp.misc.otherflags" useByScannerDiscovery="false" value="" valueType="string"/>
 								<inputType id="com.atollic.truestudio.gpp.input.736842320" superClass="com.atollic.truestudio.gpp.input"/>
 							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.813237653" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc">
+							<tool command="arm-atollic-eabi-g++" commandLinePattern="${COMMAND} ${OUTPUT_FLAG} ${OUTPUT} ${INPUTS} ${FLAGS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.ldcc.813237653" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc">
 								<option id="com.atollic.truestudio.common_options.target.endianess.922302274" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.722366753" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32F103C6" valueType="enumerated"/>
 								<option id="com.atollic.truestudio.common_options.target.instr_set.1449242526" name="Instruction set" superClass="com.atollic.truestudio.common_options.target.instr_set" useByScannerDiscovery="false" value="com.atollic.truestudio.common_options.target.instr_set.thumb2" valueType="enumerated"/>
@@ -98,37 +98,39 @@
 								<option id="com.atollic.truestudio.ldcc.general.scriptfile.682110777" name="Linker script" superClass="com.atollic.truestudio.ldcc.general.scriptfile" useByScannerDiscovery="false" value="../linker/libopencm3_stm32f103c6.ld" valueType="string"/>
 								<option id="com.atollic.truestudio.ldcc.general.nostartfiles.2048600300" name="Do not use standard start files" superClass="com.atollic.truestudio.ldcc.general.nostartfiles" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.ldcc.general.static.1239144913" name="No shared libraries" superClass="com.atollic.truestudio.ldcc.general.static" useByScannerDiscovery="false" value="false" valueType="boolean"/>
-								<option id="com.atollic.truestudio.ldcc.general.nostdlib.332595019" name="No startup or default libs" superClass="com.atollic.truestudio.ldcc.general.nostdlib" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="com.atollic.truestudio.ldcc.general.nostdlib.332595019" name="No startup or default libs" superClass="com.atollic.truestudio.ldcc.general.nostdlib" useByScannerDiscovery="false" value="false" valueType="boolean"/>
 								<option id="com.atollic.truestudio.ldcc.libraries.list.250236516" name="Libraries" superClass="com.atollic.truestudio.ldcc.libraries.list" useByScannerDiscovery="false" valueType="libs">
 									<listOptionValue builtIn="false" value="opencm3_stm32f1"/>
 								</option>
 								<option id="com.atollic.truestudio.ldcc.libraries.searchpath.780323083" name="Library search path" superClass="com.atollic.truestudio.ldcc.libraries.searchpath" useByScannerDiscovery="false" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
 								</option>
-								<option id="com.atollic.truestudio.ldcc.misc.linkerflags.832133283" name="Other options" superClass="com.atollic.truestudio.ldcc.misc.linkerflags" useByScannerDiscovery="false" value="-Wl,-cref,-u,Reset_Handler" valueType="string"/>
+								<option id="com.atollic.truestudio.ldcc.misc.linkerflags.832133283" name="Other options" superClass="com.atollic.truestudio.ldcc.misc.linkerflags" useByScannerDiscovery="false" value="-Wl,-cref,-u,Reset_Handler " valueType="string"/>
+								<option id="com.atollic.truestudio.ldcc.misc.genmapfile.336320835" name="Create map file" superClass="com.atollic.truestudio.ldcc.misc.genmapfile" useByScannerDiscovery="false"/>
 								<inputType id="com.atollic.truestudio.ldcc.input.1680745978" name="Input" superClass="com.atollic.truestudio.ldcc.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 							</tool>
 							<tool id="com.atollic.truestudio.ar.base.667689194" name="Archiver" superClass="com.atollic.truestudio.ar.base"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1143739917" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
+							<tool command="arm-atollic-reports.jar" commandLinePattern="${COMMAND} ${FLAGS} ${INPUTS}" errorParsers="" id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1143739917" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput"/>
 						</toolChain>
 					</folderInfo>
 					<folderInfo id="com.atollic.truestudio.exe.debug.1736391990.1104544640" name="/" resourcePath="libopencm3">
-						<toolChain id="com.atollic.truestudio.exe.debug.toolchain.277264209" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
+						<toolChain errorParsers="" id="com.atollic.truestudio.exe.debug.toolchain.277264209" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
 							<option id="com.atollic.truestudio.general.runtimelib.619305803.554446876" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.619305803"/>
 							<option id="com.atollic.truestudio.toolchain_options.mcu.998862146.1509016901" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.998862146"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.1978110976.2057064493" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.1978110976"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.629836199" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.693703002">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform" isAbstract="false" name="Debug platform" osList="all" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
+							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.as.629836199" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.693703002">
 								<inputType id="com.atollic.truestudio.as.input.1677248096" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.1369938879" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1059427270">
+							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.gcc.1369938879" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1059427270">
 								<inputType id="com.atollic.truestudio.gcc.input.1971947397" superClass="com.atollic.truestudio.gcc.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.397377086" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.573870460"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.gpp.755525080" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.1872588190">
-								<option id="com.atollic.truestudio.gpp.directories.select.1687257498" superClass="com.atollic.truestudio.gpp.directories.select" useByScannerDiscovery="false" valueType="includePath">
+							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.gpp.755525080" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.1872588190">
+								<option id="com.atollic.truestudio.gpp.directories.select.1687257498" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
 									<listOptionValue builtIn="false" value=""/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/include}&quot;"/>
@@ -259,6 +261,7 @@
 							<option id="com.atollic.truestudio.general.runtimelib.525357454.1978826387" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.525357454"/>
 							<option id="com.atollic.truestudio.toolchain_options.mcu.1892492499.855193097" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.1892492499"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.607751693.1772779443" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.607751693"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.release.toolchain.platform" isAbstract="false" name="release platform" superClass="com.atollic.truestudio.exe.release.toolchain.platform"/>
 							<tool id="com.atollic.truestudio.exe.release.toolchain.as.1381752656" name="Assembler" superClass="com.atollic.truestudio.exe.release.toolchain.as.686240700">
 								<inputType id="com.atollic.truestudio.as.input.1219517433" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
@@ -267,7 +270,7 @@
 							</tool>
 							<tool id="com.atollic.truestudio.exe.release.toolchain.ld.938029776" name="C Linker" superClass="com.atollic.truestudio.exe.release.toolchain.ld.1176893714"/>
 							<tool id="com.atollic.truestudio.exe.release.toolchain.gpp.535188590" name="C++ Compiler" superClass="com.atollic.truestudio.exe.release.toolchain.gpp.1828983414">
-								<option id="com.atollic.truestudio.gpp.directories.select.564128054" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
+								<option id="com.atollic.truestudio.gpp.directories.select.564128054" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
 									<listOptionValue builtIn="false" value=""/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/include}&quot;"/>
