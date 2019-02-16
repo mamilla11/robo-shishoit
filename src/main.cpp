@@ -1,18 +1,34 @@
-#include <libopencm3/stm32/rcc.h>
-#include <libopencm3/stm32/gpio.h>
+#include "config/clock.hpp"
+#include "config/hw_config.h"
+#include "hw/systick.h"
+#include "hw/counter.h"
+#include "hw/rgb.h"
 
 int main(void)
 {
-	rcc_periph_clock_enable(RCC_GPIOC);
-	//gpio_set_mode(GPIOC, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO6 | GPIO8);
-	gpio_set(GPIOC, GPIO6);
-	gpio_clear(GPIOC, GPIO8);
+	config::clock_init();
+
+	hw::systick::systick_init(config::SYSTEM_CORE_CLOCK,
+					 config::SYSTEM_CORE_CLOCK_DIV);
+
+
+	hw::Rgb eyes = hw::Rgb(config::EYES_R_PORT, config::EYES_R_PIN,
+						   config::EYES_G_PORT, config::EYES_G_PIN,
+			               config::EYES_B_PORT, config::EYES_B_PIN);
+
+	eyes.on(hw::Rgb::Color::MAGENTA);
+
+	hw::Rgb blinker = hw::Rgb(config::BLINKER_R_PORT, config::BLINKER_R_PIN,
+						      config::BLINKER_G_PORT, config::BLINKER_G_PIN,
+			                  config::BLINKER_B_PORT, config::BLINKER_B_PIN);
+	blinker.off();
+
+	hw::Counter blinkerTimer = hw::Counter(hw::Counter::Mode::CYCLE, 1000);
 
 	while(1) {
-		gpio_toggle(GPIOC, GPIO6);
-		gpio_toggle(GPIOC, GPIO8);
-		for (int i = 0; i < 800000; i++)
-			__asm__("nop");
+		if (blinkerTimer.timeout()) {
+			blinker.set_next_color();
+		}
 	}
 
 	return 0;
