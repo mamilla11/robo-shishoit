@@ -42,8 +42,8 @@
 									<listOptionValue builtIn="false" value="STM32F1"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.883396124" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/include}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/lib/libopencm3/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/lib/libopencm3/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="../src"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.671222747" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
@@ -71,8 +71,8 @@
 									<listOptionValue builtIn="false" value="STM32F1"/>
 								</option>
 								<option id="com.atollic.truestudio.gpp.directories.select.1957615281" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/lib/libopencm3/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/lib/libopencm3/include}&quot;"/>
 									<listOptionValue builtIn="false" value="../src"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1880758996" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
@@ -103,7 +103,7 @@
 									<listOptionValue builtIn="false" value="opencm3_stm32f1"/>
 								</option>
 								<option id="com.atollic.truestudio.ldcc.libraries.searchpath.780323083" name="Library search path" superClass="com.atollic.truestudio.ldcc.libraries.searchpath" useByScannerDiscovery="false" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/lib/libopencm3/lib}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.ldcc.misc.linkerflags.832133283" name="Other options" superClass="com.atollic.truestudio.ldcc.misc.linkerflags" useByScannerDiscovery="false" value="-Wl,-cref,-u,Reset_Handler " valueType="string"/>
 								<option id="com.atollic.truestudio.ldcc.misc.genmapfile.336320835" name="Create map file" superClass="com.atollic.truestudio.ldcc.misc.genmapfile" useByScannerDiscovery="false"/>
@@ -114,35 +114,8 @@
 							</tool>
 							<tool id="com.atollic.truestudio.ar.base.667689194" name="Archiver" superClass="com.atollic.truestudio.ar.base"/>
 							<tool command="arm-atollic-reports.jar" commandLinePattern="${COMMAND} ${FLAGS} ${INPUTS}" errorParsers="" id="com.atollic.truestudio.exe.debug.toolchain.secoutput.1143739917" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput">
-								<option id="com.atollic.truestudio.secoutput.general.convert.1981024404" superClass="com.atollic.truestudio.secoutput.general.convert" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="com.atollic.truestudio.secoutput.general.convert.1981024404" name="Convert build output" superClass="com.atollic.truestudio.secoutput.general.convert" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 							</tool>
-						</toolChain>
-					</folderInfo>
-					<folderInfo id="com.atollic.truestudio.exe.debug.1736391990.1104544640" name="/" resourcePath="libopencm3">
-						<toolChain errorParsers="" id="com.atollic.truestudio.exe.debug.toolchain.277264209" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.debug.toolchain" unusedChildren="">
-							<option id="com.atollic.truestudio.general.runtimelib.619305803.554446876" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.619305803"/>
-							<option id="com.atollic.truestudio.toolchain_options.mcu.998862146.1509016901" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.998862146"/>
-							<option id="com.atollic.truestudio.toolchain_options.vendor.1978110976.2057064493" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.1978110976"/>
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform" isAbstract="false" name="Debug platform" osList="all" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
-							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.as.629836199" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as.693703002">
-								<inputType id="com.atollic.truestudio.as.input.1677248096" name="Input" superClass="com.atollic.truestudio.as.input"/>
-							</tool>
-							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.gcc.1369938879" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc.1059427270">
-								<inputType id="com.atollic.truestudio.gcc.input.1971947397" superClass="com.atollic.truestudio.gcc.input"/>
-							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.397377086" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld.573870460"/>
-							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="com.atollic.truestudio.exe.debug.toolchain.gpp.755525080" name="C++ Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gpp.1872588190">
-								<option id="com.atollic.truestudio.gpp.directories.select.1687257498" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
-									<listOptionValue builtIn="false" value=""/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/include}&quot;"/>
-									<listOptionValue builtIn="false" value="../src"/>
-								</option>
-								<inputType id="com.atollic.truestudio.gpp.input.1357776030" superClass="com.atollic.truestudio.gpp.input"/>
-							</tool>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.ldcc.2128785640" name="C++ Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ldcc.813237653"/>
-							<tool id="com.atollic.truestudio.ar.base.1380818563" name="Archiver" superClass="com.atollic.truestudio.ar.base.667689194"/>
-							<tool id="com.atollic.truestudio.exe.debug.toolchain.secoutput.84351641" name="Other" superClass="com.atollic.truestudio.exe.debug.toolchain.secoutput.1143739917"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
@@ -256,33 +229,6 @@
 							</tool>
 							<tool id="com.atollic.truestudio.ar.base.1521020192" name="Archiver" superClass="com.atollic.truestudio.ar.base"/>
 							<tool id="com.atollic.truestudio.exe.release.toolchain.secoutput.2012631245" name="Other" superClass="com.atollic.truestudio.exe.release.toolchain.secoutput"/>
-						</toolChain>
-					</folderInfo>
-					<folderInfo id="com.atollic.truestudio.configuration.release.355923404.147400509" name="/" resourcePath="libopencm3">
-						<toolChain id="com.atollic.truestudio.exe.release.toolchain.254291594" name="Atollic ARM Tools" superClass="com.atollic.truestudio.exe.release.toolchain" unusedChildren="">
-							<option id="com.atollic.truestudio.general.runtimelib.525357454.1978826387" name="Runtime Library" superClass="com.atollic.truestudio.general.runtimelib.525357454"/>
-							<option id="com.atollic.truestudio.toolchain_options.mcu.1892492499.855193097" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu.1892492499"/>
-							<option id="com.atollic.truestudio.toolchain_options.vendor.607751693.1772779443" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor.607751693"/>
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.release.toolchain.platform" isAbstract="false" name="release platform" superClass="com.atollic.truestudio.exe.release.toolchain.platform"/>
-							<tool id="com.atollic.truestudio.exe.release.toolchain.as.1381752656" name="Assembler" superClass="com.atollic.truestudio.exe.release.toolchain.as.686240700">
-								<inputType id="com.atollic.truestudio.as.input.1219517433" name="Input" superClass="com.atollic.truestudio.as.input"/>
-							</tool>
-							<tool id="com.atollic.truestudio.exe.release.toolchain.gcc.25815315" name="C Compiler" superClass="com.atollic.truestudio.exe.release.toolchain.gcc.1481142262">
-								<inputType id="com.atollic.truestudio.gcc.input.1332195611" superClass="com.atollic.truestudio.gcc.input"/>
-							</tool>
-							<tool id="com.atollic.truestudio.exe.release.toolchain.ld.938029776" name="C Linker" superClass="com.atollic.truestudio.exe.release.toolchain.ld.1176893714"/>
-							<tool id="com.atollic.truestudio.exe.release.toolchain.gpp.535188590" name="C++ Compiler" superClass="com.atollic.truestudio.exe.release.toolchain.gpp.1828983414">
-								<option id="com.atollic.truestudio.gpp.directories.select.564128054" name="Include path" superClass="com.atollic.truestudio.gpp.directories.select" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/lib}&quot;"/>
-									<listOptionValue builtIn="false" value=""/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libopencm3/include}&quot;"/>
-									<listOptionValue builtIn="false" value="../src"/>
-								</option>
-								<inputType id="com.atollic.truestudio.gpp.input.1059264917" superClass="com.atollic.truestudio.gpp.input"/>
-							</tool>
-							<tool id="com.atollic.truestudio.exe.release.toolchain.ldcc.1544485984" name="C++ Linker" superClass="com.atollic.truestudio.exe.release.toolchain.ldcc.598001621"/>
-							<tool id="com.atollic.truestudio.ar.base.1502452447" name="Archiver" superClass="com.atollic.truestudio.ar.base.1521020192"/>
-							<tool id="com.atollic.truestudio.exe.release.toolchain.secoutput.876715058" name="Other" superClass="com.atollic.truestudio.exe.release.toolchain.secoutput.2012631245"/>
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
