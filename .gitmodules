@@ -1,4 +1,4 @@
-[submodule "libopencm3"]
+
+[submodule "lib/libopencm3"]
 	path = lib/libopencm3
 	url = https://github.com/mamilla11/libopencm3.git
-	branch = master
