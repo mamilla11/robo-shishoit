@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hw/led.h>
+#include <hw/gpio.h>
 
 namespace hw {
 	class Rgb {
@@ -15,9 +15,16 @@ namespace hw {
 			WHITE	= RED  | GREEN  | BLUE
 		};
 
-		Rgb(uint32_t _port_r, uint32_t _pin_r,
-			uint32_t _port_g, uint32_t _pin_g,
-			uint32_t _port_b, uint32_t _pin_b);
+		enum class Logic : uint8_t {
+			STRAIGHT,
+			INVERSE
+		};
+
+		Rgb(uint32_t port_r, uint16_t pin_r,
+			uint32_t port_g, uint16_t pin_g,
+			uint32_t port_b, uint16_t pin_b,
+			Logic logic = Logic::STRAIGHT);
+
 		~Rgb() = default;
 
 		void on(Color color);
@@ -30,7 +37,8 @@ namespace hw {
 		constexpr static uint8_t LEDS_COUNT = 3;
 		constexpr static uint8_t COLORS_COUNT = 7;
 
-		Led *_leds[LEDS_COUNT];
+		Gpio *_leds[LEDS_COUNT];
 		Color _current_color = Color::RED;
+		Logic _logic = Logic::STRAIGHT;
 	};
 }

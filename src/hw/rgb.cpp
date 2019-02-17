@@ -2,13 +2,14 @@
 
 namespace hw {
 
-Rgb::Rgb(uint32_t _port_r, uint32_t _pin_r,
-		 uint32_t _port_g, uint32_t _pin_g,
-		 uint32_t _port_b, uint32_t _pin_b)
+Rgb::Rgb(uint32_t port_r, uint16_t pin_r,
+		 uint32_t port_g, uint16_t pin_g,
+		 uint32_t port_b, uint16_t pin_b,
+		 Logic logic) : _logic(logic)
 {
-	_leds[0] = new Led(_port_r, _pin_r);
-	_leds[1] = new Led(_port_g, _pin_g);
-	_leds[2] = new Led(_port_b, _pin_b);
+	_leds[0] = new Gpio(port_r, pin_r, Gpio::Mode::Output10MHz, Gpio::Type::OutputPushPull);
+	_leds[1] = new Gpio(port_g, pin_g, Gpio::Mode::Output10MHz, Gpio::Type::OutputPushPull);
+	_leds[2] = new Gpio(port_b, pin_b, Gpio::Mode::Output10MHz, Gpio::Type::OutputPushPull);
 }
 
 void Rgb::on(Color color)
@@ -17,10 +18,10 @@ void Rgb::on(Color color)
 
 	for(int i = 0; i < LEDS_COUNT; i++) {
 		if ((mask & 0b001) == 0b001) {
-			_leds[i]->set();
+			_logic == Logic::STRAIGHT ? _leds[i]->set() : _leds[i]->clear();
 	    }
 	    else {
-	    	_leds[i]->clear();
+	    	_logic == Logic::STRAIGHT ? _leds[i]->clear() : _leds[i]->set();
 	    }
 
 	    mask = mask >> 1;
@@ -28,8 +29,8 @@ void Rgb::on(Color color)
 }
 
 void Rgb::off() {
-	for (int i = 0; i < LEDS_COUNT; ++i) {
-		_leds[i]->clear();
+	for (int i = 0; i < LEDS_COUNT; i++) {
+		_logic == Logic::STRAIGHT ? _leds[i]->clear() : _leds[i]->set();
 	}
 }
 

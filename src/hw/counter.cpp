@@ -2,11 +2,10 @@
 #include <hw/systick.h>
 
 namespace hw {
-Counter::Counter(Mode mode, uint32_t period_ms)
+Counter::Counter(Mode mode, uint32_t period_ms) : _period_ms(period_ms), _mode(mode)
+
 {
-	_mode = mode;
 	_saved_ms = systick::get_counter_ms();
-	_period_ms = period_ms;
 
 	switch (_mode)
 	{
