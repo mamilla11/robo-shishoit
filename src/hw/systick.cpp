@@ -4,10 +4,10 @@ namespace hw {
 namespace systick {
 volatile uint32_t counter_ms;
 
-void sys_tick_handler(void)
-{
-	counter_ms++;
-}
+//void sys_tick_handler(void)
+//{
+//	counter_ms++;
+//}
 
 void delay_nop(uint32_t count)
 {
