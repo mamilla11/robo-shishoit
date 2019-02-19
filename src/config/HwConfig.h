@@ -1,7 +1,12 @@
 #pragma once
 
+#include <cstdint>
+
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/timer.h>
+#include <libopencm3/cm3/nvic.h>
+#include <libopencm3/stm32/exti.h>
+#include <libopencmsis/core_cm3.h>
 
 namespace config {
 
@@ -26,6 +31,10 @@ static constexpr uint32_t BLINKER_B_PORT = GPIOB;
 static constexpr uint16_t BLINKER_B_PIN = GPIO0;
 
 static constexpr uint32_t BLINKER_TIM = TIM3;
+
+static constexpr uint32_t TOUCH_PORT = GPIOA;
+static constexpr uint16_t TOUCH_PIN  = GPIO8;
+static constexpr uint32_t TOUCH_NVIC = NVIC_EXTI9_5_IRQ;
 
 static constexpr uint8_t CHAR_COUNT = 4;
 static constexpr uint32_t CHAR_SEL_PORTS[CHAR_COUNT] = {

@@ -17,14 +17,61 @@ BlinkerTask::BlinkerTask() : TaskBase(config::tasks::BlinkerTask::STACK_SIZE,
 }
 
 void BlinkerTask::Run() {
-	_setNextColor();
-
 	while(true) {
-		_blocking_read();
+		if (_state == State::IDLE) {
+			switch (_direction) {
+				case BlinkerDirection::UP:
+					_increaseIntensity();
+					_direction = BlinkerDirection::DOWN;
+					break;
+				case BlinkerDirection::DOWN:
+					_decreaseIntensity();
+					_direction = BlinkerDirection::UP;
+					break;
+			}
+		}
+		if (_state == State::SETUP) {
+			_processEvent();
+			if (_state == State::SETUP)
+				_blocking_read();
+		}
+	}
+}
 
-		switch (_fifo_data.token) {
-		case  msg::BlinkerMessage::Token::WAIT:
-			_setNextColor();
+void BlinkerTask::_increaseIntensity() {
+	_setRandomDutySteps();
+	_setDutyCycle(10, 10, 10);
+
+	if (rand() % 2 == 0) {
+		_disableRandomColor();
+	}
+
+	for (uint8_t i = 0; i < _DUTY_STEPS_COUNT; i++) {
+		if (_read(_NEW_MESSAGE_WAIT_TIMEOUT_MS)) {
+			_state = State::SETUP;
+			break;
+		}
+		_increaseDutyCycle(rDutyStep, gDutyStep, bDutyStep);
+		_delay(_DELAY_BASE_TICKS + i / 4);
+	}
+}
+
+void BlinkerTask::_decreaseIntensity() {
+	for (uint8_t i = _DUTY_STEPS_COUNT; i > 0; i--) {
+		if (_read(_NEW_MESSAGE_WAIT_TIMEOUT_MS)) {
+			_state = State::SETUP;
+			break;
+		}
+		_decreaseDutyCycle(rDutyStep, gDutyStep, bDutyStep);
+		_delay(_DELAY_BASE_TICKS + i / 4);
+	}
+}
+
+void BlinkerTask::_processEvent() {
+	switch (_fifo_data.token) {
+		case  msg::BlinkerMessage::Token::IDLE:
+			_state = State::IDLE;
+			_direction = BlinkerDirection::UP;
 			break;
 		case  msg::BlinkerMessage::Token::EYES_SETUP:
 			fifo_flush();
@@ -34,34 +81,7 @@ void BlinkerTask::Run() {
 			fifo_flush();
 			_setGreenColor();
 			break;
-		case  msg::BlinkerMessage::Token::SETUP_FINISHED:
-			_setNextColor();
-			break;
-		}
 	}
-}
-
-void BlinkerTask::_setNextColor() {
-	_setRandomDutySteps();
-	_setDutyCycle(10, 10, 10);
-
-	if (rand() % 2 == 0) {
-		_disableRandomColor();
-	}
-
-	for (uint8_t i = 0; i < _DUTY_STEPS_COUNT; i++) {
-		_increaseDutyCycle(rDutyStep, gDutyStep, bDutyStep);
-		_delay(_DELAY_BASE_TICKS + i / 4);
-	}
-
-	for (uint8_t i = _DUTY_STEPS_COUNT; i > 0; i--) {
-		_decreaseDutyCycle(rDutyStep, gDutyStep, bDutyStep);
-		_delay(_DELAY_BASE_TICKS + i / 4);
-	}
-
-	BlinkerTask::MsgType msg;
-	msg.token = msg::BlinkerEvent::WAIT;
-	BlinkerTask::fifo_push(&msg);
 }
 
 void BlinkerTask::_setRedColor() {

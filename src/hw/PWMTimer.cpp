@@ -1,5 +1,4 @@
 #include <hw/PWMTimer.h>
-#include <libopencm3/stm32/gpio.h>
 
 namespace hw {
 
@@ -19,7 +18,6 @@ void PWMTimer::setupChannel(uint32_t port, uint16_t pin, Channel channel) {
 	timer_set_oc_mode(_timer, _channel, tim_oc_mode::TIM_OCM_PWM1);
 	timer_set_oc_polarity_low(_timer, _channel);
 	timer_enable_oc_preload(_timer, _channel);
-	//timer_enable_irq(_timer, TIM_DIER_CC3IE);
 }
 
 void PWMTimer::setDutyCycle(Channel channel, uint16_t value) {

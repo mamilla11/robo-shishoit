@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <libopencm3/stm32/timer.h>
+#include <config/HwConfig.h>
 
 namespace hw {
 
