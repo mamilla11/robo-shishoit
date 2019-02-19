@@ -10,6 +10,8 @@
 #include <tasks/BlinkerTask.h>
 
 #include <hw/ModeSwitcher.h>
+#include <hw/Backlight.hpp>
+#include <hw/Buttons.h>
 
 namespace rtos = cpp_freertos;
 
@@ -26,7 +28,9 @@ int main(void)
 
 	__disable_irq();
 
-	ModeSwitcher *switcher = new ModeSwitcher();
+	hw::ModeSwitcher *switcher = new hw::ModeSwitcher();
+	hw::Backlight *backlight = new hw::Backlight();
+	hw::Buttons *buttons = new hw::Buttons();
 	auto blinkerTask = new tasks::BlinkerTask();
 
 	rtos::Thread::StartScheduler();

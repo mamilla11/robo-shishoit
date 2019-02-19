@@ -4,6 +4,8 @@
 
 extern "C" void exti9_5_isr(void);
 
+namespace hw {
+
 class ModeSwitcher {
 public:
 	enum class Mode : uint8_t {
@@ -25,3 +27,5 @@ private:
 	void _setup_gpio();
 	void _setup_exti();
 };
+
+}

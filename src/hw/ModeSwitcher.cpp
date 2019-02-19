@@ -1,6 +1,8 @@
 #include "ModeSwitcher.h"
 #include "tasks/BlinkerTask.h"
 
+namespace hw {
+
 ModeSwitcher *switcherPointer;
 
 ModeSwitcher::ModeSwitcher() {
@@ -46,9 +48,11 @@ void ModeSwitcher::_setup_exti() {
 	exti_enable_request(config::TOUCH_PIN);
 }
 
+}
+
 void exti9_5_isr(void)
 {
 	exti_reset_request(config::TOUCH_PIN);
-	switcherPointer->toNextState();
+	hw::switcherPointer->toNextState();
 }
 
