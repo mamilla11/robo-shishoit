@@ -19,6 +19,8 @@ static constexpr uint16_t EYES_G_PIN = GPIO3;
 static constexpr uint32_t EYES_B_PORT = GPIOB;
 static constexpr uint16_t EYES_B_PIN = GPIO10;
 
+static constexpr uint32_t EYES_TIM = TIM2;
+
 static constexpr uint32_t BLINKER_R_PORT = GPIOB;
 static constexpr uint16_t BLINKER_R_PIN = GPIO4;
 
@@ -60,7 +62,8 @@ static constexpr uint32_t CHAR_SEL_PINS[CHAR_COUNT] = {
 static constexpr uint32_t CHAR_SEG_PORT = GPIOA;
 
 inline void SWJDisable() {
-	uint32_t remap = AFIO_MAPR_TIM3_REMAP_PARTIAL_REMAP;
+	uint32_t remap = AFIO_MAPR_TIM3_REMAP_PARTIAL_REMAP |
+			         AFIO_MAPR_TIM2_REMAP_FULL_REMAP;
 	gpio_primary_remap(AFIO_MAPR_SWJ_CFG_JTAG_OFF_SW_ON, remap);
 }
 

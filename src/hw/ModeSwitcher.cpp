@@ -1,5 +1,5 @@
 #include "ModeSwitcher.h"
-#include "tasks/BlinkerTask.h"
+#include "tasks/LogicTask.h"
 
 namespace hw {
 
@@ -17,22 +17,22 @@ void ModeSwitcher::toNextState() {
 	if (mode == Mode::COUNT)
 		mode = Mode::IDLE;
 
-	tasks::BlinkerTask::MsgType msg;
+	tasks::LogicTask::MsgType msg;
 
 	switch(mode) {
 	case Mode::IDLE:
-		msg.token = tasks::msg::BlinkerEvent::IDLE;
+		msg.token = tasks::msg::LogicEvent::IDLE;
 		break;
 	case Mode::EYES_SETUP:
-		msg.token = tasks::msg::BlinkerEvent::EYES_SETUP;
+		msg.token = tasks::msg::LogicEvent::EYES_SETUP;
 		break;
 	case Mode::TIME_SETUP:
-		msg.token = tasks::msg::BlinkerEvent::TIME_SETUP;
+		msg.token = tasks::msg::LogicEvent::TIME_SETUP;
 		break;
 	default: break;
 	}
 
-	tasks::BlinkerTask::fifo_push_from_isr(&msg);
+	tasks::LogicTask::fifo_push_from_isr(&msg);
 }
 
 void ModeSwitcher::_setup_gpio() {

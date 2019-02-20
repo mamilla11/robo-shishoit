@@ -1,4 +1,5 @@
 #include "Buttons.h"
+#include <tasks/LogicTask.h>
 
 namespace hw {
 
@@ -11,11 +12,15 @@ Buttons::Buttons() {
 }
 
 void Buttons::notifyLeftButtonPressed() {
-
+	tasks::LogicTask::MsgType msg;
+	msg.token = tasks::msg::LogicEvent::LEFT_BUTTON_PRESSED;
+	tasks::LogicTask::fifo_push_from_isr(&msg);
 }
 
 void Buttons::notifyRightButtonPressed() {
-
+	tasks::LogicTask::MsgType msg;
+	msg.token = tasks::msg::LogicEvent::RIGHT_BUTTON_PRESSED;
+	tasks::LogicTask::fifo_push_from_isr(&msg);
 }
 
 void Buttons::_setup_gpio() {

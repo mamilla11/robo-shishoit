@@ -1,5 +1,4 @@
 #include "BlinkerTask.h"
-#include <config/HwConfig.h>
 #include <stdlib.h>
 
 namespace tasks {

@@ -16,6 +16,7 @@ inline void ClockInit() {
 	rcc_periph_clock_enable(RCC_GPIOC);
 	rcc_periph_clock_enable(RCC_AFIO);
 	rcc_periph_clock_enable(RCC_TIM3);
+	rcc_periph_clock_enable(RCC_TIM2);
 }
 
 inline void SystickInit()
