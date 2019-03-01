@@ -4,8 +4,9 @@
 
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/timer.h>
-#include <libopencm3/cm3/nvic.h>
 #include <libopencm3/stm32/exti.h>
+#include <libopencm3/stm32/rtc.h>
+#include <libopencm3/cm3/nvic.h>
 #include <libopencmsis/core_cm3.h>
 
 namespace config {
@@ -50,14 +51,18 @@ static constexpr uint16_t BUTTON_RIGHT_EXTI = EXTI12;
 
 static constexpr uint32_t BUTTONS_NVIC = NVIC_EXTI15_10_IRQ;
 
+static constexpr rcc_osc RTC_SOURCE = rcc_osc::RCC_LSE;
+static constexpr uint32_t RTC_PRESCALER = 0x7FFF;
 
-static constexpr uint8_t CHAR_COUNT = 4;
-static constexpr uint32_t CHAR_SEL_PORTS[CHAR_COUNT] = {
-		GPIOB, GPIOB, GPIOC, GPIOB
-};
-static constexpr uint32_t CHAR_SEL_PINS[CHAR_COUNT] = {
-		GPIO2, GPIO13, GPIO13, GPIO8
-};
+static constexpr uint32_t CHAR_1_SEL_PORT = GPIOB;
+static constexpr uint32_t CHAR_2_SEL_PORT = GPIOB;
+static constexpr uint32_t CHAR_3_SEL_PORT = GPIOC;
+static constexpr uint32_t CHAR_4_SEL_PORT = GPIOB;
+
+static constexpr uint16_t CHAR_1_SEL_PIN = GPIO2;
+static constexpr uint16_t CHAR_2_SEL_PIN = GPIO13;
+static constexpr uint16_t CHAR_3_SEL_PIN = GPIO13;
+static constexpr uint16_t CHAR_4_SEL_PIN = GPIO8;
 
 static constexpr uint32_t CHAR_SEG_PORT = GPIOA;
 

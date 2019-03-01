@@ -9,6 +9,8 @@
 
 #include <tasks/BlinkerTask.h>
 #include <tasks/LogicTask.h>
+#include <tasks/TimeTask.h>
+#include <tasks/DisplayTask.h>
 
 namespace rtos = cpp_freertos;
 
@@ -25,8 +27,11 @@ int main(void)
 
 	__disable_irq();
 
-	auto blinkerTask = new tasks::BlinkerTask();
 	auto logicTask = new tasks::LogicTask();
+	auto blinkerTask = new tasks::BlinkerTask();
+	auto timeTask = new tasks::TimeTask();
+	auto displayTask = new tasks::DisplayTask();
+
 
 	rtos::Thread::StartScheduler();
 

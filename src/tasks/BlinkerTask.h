@@ -45,7 +45,7 @@ private:
 	static const hw::PWMTimer::Channel _CHANNEL_B = hw::PWMTimer::Channel::CH3;
 
 	static constexpr uint16_t _BLINKER_PERIOD_US = 600;
-	static constexpr uint8_t  _DELAY_BASE_TICKS = 2;
+	static constexpr uint8_t  _DELAY_BASE_TICKS = 30;
 	static constexpr uint8_t  _MAX_DUTY_STEP = 20;
 	static constexpr uint8_t  _NEW_MESSAGE_WAIT_TIMEOUT_MS = 10;
 	static constexpr uint8_t  _DUTY_STEPS_COUNT = _BLINKER_PERIOD_US / _MAX_DUTY_STEP - 1;

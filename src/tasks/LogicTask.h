@@ -8,6 +8,7 @@
 #include <hw/Backlight.hpp>
 #include <hw/PWMTimer.h>
 #include <hw/Buttons.h>
+#include <hw/Time.h>
 
 namespace tasks {
 
@@ -19,6 +20,7 @@ enum class LogicEvent : uint8_t {
 	TIME_SETUP,
 	LEFT_BUTTON_PRESSED,
 	RIGHT_BUTTON_PRESSED,
+	UPDATE_TIME,
 };
 
 using LogicMessage = base::Event<LogicEvent>;
@@ -71,9 +73,19 @@ private:
 	hw::ModeSwitcher _switcher;
 	hw::Backlight _backlight;
 	hw::Buttons _buttons;
+	hw::Time _time;
+	uint8_t _hours = 0;
+	uint8_t _minutes = 0;
 
 	void _leftButtonPressedHandler();
 	void _rightButtonPressedHandler();
+
+	void _updateTime();
+	void _displayHours(uint8_t hours, bool dotted = true);
+	void _displayMinutes(uint8_t minutes);
+	void _displayNextHour();
+	void _displayNextMinute();
+	void _saveTime();
 
 	void _setEyesColor(Color color);
 	void _setNextEyesColor();

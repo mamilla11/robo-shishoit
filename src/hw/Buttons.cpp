@@ -5,6 +5,9 @@ namespace hw {
 
 Buttons *buttonsPointer;
 
+static volatile uint8_t leftState = 1;
+static volatile uint8_t rightState = 1;
+
 Buttons::Buttons() {
 	buttonsPointer = this;
 	_setup_gpio();
@@ -49,13 +52,27 @@ void Buttons::_setup_exti() {
 void exti15_10_isr(void)
 {
 	if (exti_get_flag_status(config::BUTTON_LEFT_EXTI)) {
-		hw::buttonsPointer->notifyLeftButtonPressed();
 		exti_reset_request(config::BUTTON_LEFT_EXTI);
+		uint16_t state =
+				gpio_get(config::BUTTON_LEFT_PORT, config::BUTTON_LEFT_PIN) >> 15;
+
+		if (state != hw::leftState) {
+			hw::leftState = state;
+			if (state == 1)
+				hw::buttonsPointer->notifyLeftButtonPressed();
+		}
 	}
 
 	if (exti_get_flag_status(config::BUTTON_RIGHT_EXTI)) {
-		hw::buttonsPointer->notifyRightButtonPressed();
 		exti_reset_request(config::BUTTON_RIGHT_EXTI);
+		uint16_t state =
+				gpio_get(config::BUTTON_RIGHT_PORT, config::BUTTON_RIGHT_PIN) >> 12;
+
+		if (state != hw::rightState) {
+			hw::rightState = state;
+			if (state == 1)
+				hw::buttonsPointer->notifyRightButtonPressed();
+		}
 	}
 }
 

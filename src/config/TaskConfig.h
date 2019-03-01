@@ -17,6 +17,20 @@ struct BlinkerTask {
     static constexpr uint32_t FIFO_SIZE  = 2;
 };
 
+struct TimeTask {
+    static constexpr uint32_t STACK_SIZE = MIN_TASK_STACK_SIZE;
+    static constexpr const char NAME[]   = "Time Task";
+    static constexpr uint32_t PRIORITY   = MIN_TASK_PRIORITY;
+    static constexpr uint32_t SLEEP_TIME = 1000;
+};
+
+struct DisplayTask {
+    static constexpr uint32_t STACK_SIZE = MIN_TASK_STACK_SIZE;
+    static constexpr const char NAME[]   = "Display Task";
+    static constexpr uint32_t PRIORITY   = MIN_TASK_PRIORITY;
+    static constexpr uint32_t SLEEP_TIME = 1;
+};
+
 struct LogicTask {
     static constexpr uint32_t STACK_SIZE = MIN_TASK_STACK_SIZE;
     static constexpr const char NAME[]   = "Logic Task";

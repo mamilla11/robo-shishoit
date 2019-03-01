@@ -12,6 +12,10 @@ public:
 		gpio_set(config::BACKLIGHT_PORT, config::BACKLIGHT_PIN);
 	}
 	~Backlight() = default;
+
+	void toggle() {
+		gpio_toggle(config::BACKLIGHT_PORT, config::BACKLIGHT_PIN);
+	}
 };
 
 }
