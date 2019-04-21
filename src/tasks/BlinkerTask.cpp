@@ -3,8 +3,11 @@
 
 namespace tasks {
 
-BlinkerTask::BlinkerTask() : TaskBase(config::tasks::BlinkerTask::STACK_SIZE,
-									  config::tasks::BlinkerTask::PRIORITY) {
+BlinkerTask::BlinkerTask() :
+		Thread(config::tasks::BlinkerTask::NAME,
+			   config::tasks::BlinkerTask::STACK_SIZE,
+			   config::tasks::BlinkerTask::PRIORITY)
+ {
 
 	_pwm = new hw::PWMTimer(config::BLINKER_TIM, _BLINKER_PERIOD_US);
 	_pwm->setupChannel(config::BLINKER_R_PORT, config::BLINKER_R_PIN, _CHANNEL_R);
@@ -17,22 +20,15 @@ BlinkerTask::BlinkerTask() : TaskBase(config::tasks::BlinkerTask::STACK_SIZE,
 
 void BlinkerTask::Run() {
 	while(true) {
-		if (_state == State::IDLE) {
-			switch (_direction) {
-				case BlinkerDirection::UP:
-					_increaseIntensity();
-					_direction = BlinkerDirection::DOWN;
-					break;
-				case BlinkerDirection::DOWN:
-					_decreaseIntensity();
-					_direction = BlinkerDirection::UP;
-					break;
-			}
-		}
-		if (_state == State::SETUP) {
-			_processEvent();
-			if (_state == State::SETUP)
-				_blocking_read();
+		switch (_direction) {
+			case BlinkerDirection::UP:
+				_increaseIntensity();
+				_direction = BlinkerDirection::DOWN;
+				break;
+			case BlinkerDirection::DOWN:
+				_decreaseIntensity();
+				_direction = BlinkerDirection::UP;
+				break;
 		}
 	}
 }
@@ -46,10 +42,6 @@ void BlinkerTask::_increaseIntensity() {
 	}
 
 	for (uint8_t i = 0; i < _DUTY_STEPS_COUNT; i++) {
-		if (_read(_NEW_MESSAGE_WAIT_TIMEOUT_MS)) {
-			_state = State::SETUP;
-			break;
-		}
 		_increaseDutyCycle(rDutyStep, gDutyStep, bDutyStep);
 		_delay(_DELAY_BASE_TICKS + i / 4);
 	}
@@ -57,43 +49,9 @@ void BlinkerTask::_increaseIntensity() {
 
 void BlinkerTask::_decreaseIntensity() {
 	for (uint8_t i = _DUTY_STEPS_COUNT; i > 0; i--) {
-		if (_read(_NEW_MESSAGE_WAIT_TIMEOUT_MS)) {
-			_state = State::SETUP;
-			break;
-		}
 		_decreaseDutyCycle(rDutyStep, gDutyStep, bDutyStep);
 		_delay(_DELAY_BASE_TICKS + i / 4);
 	}
-}
-
-void BlinkerTask::_processEvent() {
-	switch (_fifo_data.token) {
-		case  msg::BlinkerMessage::Token::IDLE:
-			_state = State::IDLE;
-			_direction = BlinkerDirection::UP;
-			break;
-		case  msg::BlinkerMessage::Token::EYES_SETUP:
-			fifo_flush();
-			_setRedColor();
-			break;
-		case  msg::BlinkerMessage::Token::TIME_SETUP:
-			fifo_flush();
-			_setGreenColor();
-			break;
-	}
-}
-
-void BlinkerTask::_setRedColor() {
-
-	_pwm->setDutyCycle(_CHANNEL_G, 0);
-	_pwm->setDutyCycle(_CHANNEL_B, 0);
-	_pwm->setDutyCycle(_CHANNEL_R, _BLINKER_PERIOD_US - 1);
-}
-
-void BlinkerTask::_setGreenColor() {
-	_pwm->setDutyCycle(_CHANNEL_R, 0);
-	_pwm->setDutyCycle(_CHANNEL_B, 0);
-	_pwm->setDutyCycle(_CHANNEL_G, _BLINKER_PERIOD_US - 1);
 }
 
 void BlinkerTask::_delay(uint32_t ticks) {

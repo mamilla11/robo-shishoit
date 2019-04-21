@@ -9,7 +9,9 @@ Time *timePointer;
 Time::Time() {
 	timePointer = this;
 	rtc_auto_awake(config::RTC_SOURCE, config::RTC_PRESCALER);
-	rtc_set_alarm_time(86399);
+	rtc_set_alarm_time(_SECONDS_IN_DAY);
+
+	_restoreTime();
 
 	nvic_enable_irq(NVIC_RTC_IRQ);
 	rtc_interrupt_enable(RTC_ALR);
@@ -35,6 +37,11 @@ void Time::setTime(uint8_t hours, uint8_t minutes) {
 	rtc_set_counter_val(counter);
 }
 
+void Time::_restoreTime() {
+	uint32_t counter = rtc_get_counter_val();
+	uint32_t newCounter =
+			counter - (counter / _SECONDS_IN_DAY * _SECONDS_IN_DAY);
+	rtc_set_counter_val(newCounter);
 }
 
 void rtc_isr(void) {
@@ -42,4 +49,6 @@ void rtc_isr(void) {
 		rtc_clear_flag(RTC_ALR);
 		rtc_set_counter_val(0);
 	}
+}
+
 }

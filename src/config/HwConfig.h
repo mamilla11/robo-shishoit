@@ -6,6 +6,7 @@
 #include <libopencm3/stm32/timer.h>
 #include <libopencm3/stm32/exti.h>
 #include <libopencm3/stm32/rtc.h>
+#include <libopencm3/stm32/i2c.h>
 #include <libopencm3/cm3/nvic.h>
 #include <libopencmsis/core_cm3.h>
 
@@ -37,14 +38,22 @@ static constexpr uint32_t TOUCH_PORT = GPIOA;
 static constexpr uint16_t TOUCH_PIN  = GPIO8;
 static constexpr uint32_t TOUCH_NVIC = NVIC_EXTI9_5_IRQ;
 
+static constexpr uint32_t LONG_PRESS_TIM = TIM1;
+static constexpr uint32_t LONG_PRESS_NVIC_2 = NVIC_TIM1_UP_IRQ;
+static constexpr uint32_t LONG_PRESS_NVIC_PRIO = 191 + 0x10;
+
+
 static constexpr uint32_t BACKLIGHT_PORT = GPIOB;
-static constexpr uint32_t BACKLIGHT_PIN = GPIO1;
+static constexpr uint16_t BACKLIGHT_PIN = GPIO1;
+
+static constexpr uint32_t HANDLED_PORT = GPIOB;
+static constexpr uint16_t HANDLED_PIN = GPIO9;
 
 static constexpr uint32_t BUTTON_LEFT_PORT = GPIOB;
-static constexpr uint32_t BUTTON_LEFT_PIN = GPIO15;
+static constexpr uint16_t BUTTON_LEFT_PIN = GPIO15;
 
 static constexpr uint32_t BUTTON_RIGHT_PORT = GPIOB;
-static constexpr uint32_t BUTTON_RIGHT_PIN = GPIO12;
+static constexpr uint16_t BUTTON_RIGHT_PIN = GPIO12;
 
 static constexpr uint16_t BUTTON_LEFT_EXTI = EXTI15;
 static constexpr uint16_t BUTTON_RIGHT_EXTI = EXTI12;
@@ -65,6 +74,15 @@ static constexpr uint16_t CHAR_3_SEL_PIN = GPIO13;
 static constexpr uint16_t CHAR_4_SEL_PIN = GPIO8;
 
 static constexpr uint32_t CHAR_SEG_PORT = GPIOA;
+
+static constexpr uint32_t SENSOR_SCL_PORT = GPIOB;
+static constexpr uint32_t SENSOR_SDA_PORT = GPIOB;
+
+static constexpr uint16_t SENSOR_SCL_PIN = GPIO6;
+static constexpr uint16_t SENSOR_SDA_PIN = GPIO7;
+static constexpr uint8_t SENSOR_ADDRESS = 0x40;
+static constexpr uint32_t SENSOR_I2C = I2C1;
+
 
 inline void SWJDisable() {
 	uint32_t remap = AFIO_MAPR_TIM3_REMAP_PARTIAL_REMAP |

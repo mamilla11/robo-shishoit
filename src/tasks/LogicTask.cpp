@@ -4,14 +4,16 @@
 
 namespace tasks {
 
-LogicTask::LogicTask() : TaskBase(config::tasks::LogicTask::STACK_SIZE,
-		                          config::tasks::LogicTask::PRIORITY),
-						 _switcher(hw::ModeSwitcher()),
-						 _backlight(hw::Backlight()),
-						 _buttons(hw::Buttons()),
-						 _time(hw::Time())
+LogicTask::LogicTask() :
+		TaskBase(config::tasks::LogicTask::STACK_SIZE,
+				 config::tasks::LogicTask::PRIORITY),
+				 _touch(hw::Touch()),
+				 _backlight(hw::Backlight()),
+				 _buttons(hw::Buttons()),
+				 _time(hw::Time())
 {
 
+	hw::HandLed();
 	_eyesColorPWM = new hw::PWMTimer(config::EYES_TIM, _EYES_PERIOD_US);
 	_eyesColorPWM->setupChannel(config::EYES_R_PORT, config::EYES_R_PIN, _CHANNEL_R);
 	_eyesColorPWM->setupChannel(config::EYES_G_PORT, config::EYES_G_PIN, _CHANNEL_G);
@@ -23,27 +25,15 @@ LogicTask::LogicTask() : TaskBase(config::tasks::LogicTask::STACK_SIZE,
 }
 
 void LogicTask:: Run() {
-	BlinkerTask::MsgType msg;
-
 	while(true) {
 		_blocking_read();
 
 		switch (_fifo_data.token) {
-			case msg::LogicEvent::IDLE:
-				_state = State::IDLE;
-				msg.token = msg::BlinkerEvent::IDLE;
-				BlinkerTask::fifo_push_from_isr(&msg);
+			case msg::LogicEvent::TOUCH_PRESSED:
+				_setNextEyesColor();
 				break;
-			case msg::LogicEvent::EYES_SETUP:
-				_state = State::EYES_SETUP;
-				_displayHours(_hours);
-				msg.token = msg::BlinkerEvent::EYES_SETUP;
-				BlinkerTask::fifo_push_from_isr(&msg);
-				break;
-			case msg::LogicEvent::TIME_SETUP:
-				_state = State::TIME_SETUP;
-				msg.token = msg::BlinkerEvent::TIME_SETUP;
-				BlinkerTask::fifo_push_from_isr(&msg);
+			case msg::LogicEvent::LEFT_BUTTON_LONG_PRESS:
+				_switchState();
 				break;
 			case msg::LogicEvent::LEFT_BUTTON_PRESSED:
 				_leftButtonPressedHandler();
@@ -62,29 +52,31 @@ void LogicTask:: Run() {
 
 void LogicTask::_leftButtonPressedHandler() {
 	switch (_state) {
-		case State::IDLE: break;
-		case State::EYES_SETUP:
-			_setNextEyesColor();
-			break;
 		case State::TIME_SETUP:
 			_displayNextHour();
 			_saveTime();
 			break;
-		default: break;
+		default:
+			break;
 	}
 }
 
 void LogicTask::_rightButtonPressedHandler() {
 	switch (_state) {
-		case State::IDLE: break;
-		case State::EYES_SETUP:
-			_setEyesIntensity();
-			break;
 		case State::TIME_SETUP:
 			_displayNextMinute();
 			_saveTime();
 			break;
-		default: break;
+		default:
+			break;
+	}
+}
+
+void LogicTask::_switchState() {
+	if (_state == State::IDLE) {
+		_state = State::TIME_SETUP;
+	} else {
+		_state = State::IDLE;
 	}
 }
 
@@ -104,25 +96,13 @@ void LogicTask::_updateTime() {
 }
 
 void LogicTask::_displayHours(uint8_t hours, bool dotted) {
-	static uint8_t last_hours = 0;
-
+	DisplayTask::setChar(0, (hours / 10 % 10));
 	DisplayTask::setChar(1, (hours % 10), dotted);
-
-	if (hours != last_hours) {
-		DisplayTask::setChar(0, (hours / 10 % 10));
-		last_hours = hours;
-	}
-
 }
 
 void LogicTask::_displayMinutes(uint8_t minutes) {
-	static uint8_t last_minutes = 0;
-
-	if (minutes != last_minutes) {
-		DisplayTask::setChar(2, (minutes / 10 % 10));
-		DisplayTask::setChar(3, (minutes % 10));
-		last_minutes = minutes;
-	}
+	DisplayTask::setChar(2, (minutes / 10 % 10));
+	DisplayTask::setChar(3, (minutes % 10));
 }
 
 void LogicTask::_displayNextHour() {
@@ -197,43 +177,6 @@ void LogicTask::_setNextEyesColor() {
 	}
 
 	_setEyesColor(_eyesColor);
-}
-
-void LogicTask::_setEyesIntensity() {
-	_eyesIntensity += EYES_DUTY_CYCLE_STEP;
-
-	if (_eyesIntensity > EYES_MAX_DUTY_CYCLE)
-		_eyesIntensity = 0;
-
-	switch (_eyesColor) {
-		case Color::RED:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, _eyesIntensity);
-			break;
-		case Color::GREEN:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, _eyesIntensity);
-			break;
-		case Color::BLUE:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, _eyesIntensity);
-			break;
-		case Color::MAGENTA:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, _eyesIntensity);
-			break;
-		case Color::CYAN:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, _eyesIntensity);
-			break;
-		case Color::YELLOW:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, _eyesIntensity);
-			break;
-		case Color::WHITE:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, _eyesIntensity);
-			break;
-		default: break;
-	}
 }
 
 }

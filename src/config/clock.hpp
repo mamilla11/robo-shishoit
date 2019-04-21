@@ -17,8 +17,10 @@ inline void ClockInit() {
 	rcc_periph_clock_enable(RCC_AFIO);
 	rcc_periph_clock_enable(RCC_TIM3);
 	rcc_periph_clock_enable(RCC_TIM2);
+	rcc_periph_clock_enable(RCC_TIM1); //long press detection
 	rcc_periph_clock_enable(RCC_PWR);
 	rcc_periph_clock_enable(RCC_BKP);
+	rcc_periph_clock_enable(RCC_I2C1);
 }
 
 inline void SystickInit()

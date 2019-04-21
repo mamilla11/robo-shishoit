@@ -1,28 +1,16 @@
 #pragma once
 
-#include "base/TaskBase.hpp"
-#include "base/Message.hpp"
+#include <thread.hpp>
+#include <ticks.hpp>
 
 #include <config/TaskConfig.h>
 #include <hw/PWMTimer.h>
 
 namespace tasks {
 
-namespace msg {
+namespace rtos = cpp_freertos;
 
-enum class BlinkerEvent : uint8_t {
-	IDLE,
-	EYES_SETUP,
-	TIME_SETUP,
-};
-
-using BlinkerMessage = base::Event<BlinkerEvent>;
-
-}
-
-class BlinkerTask final : public base::TaskBase<config::tasks::BlinkerTask::NAME,
-		         	 	  msg::BlinkerMessage,
-						  config::tasks::BlinkerTask::FIFO_SIZE> {
+class BlinkerTask final : rtos::Thread {
 public:
 	BlinkerTask();
 	~BlinkerTask() = default;
@@ -30,11 +18,6 @@ public:
 	void Run();
 
 private:
-	enum class State : uint8_t {
-		IDLE,
-		SETUP,
-	};
-
 	enum class BlinkerDirection {
 		UP,
 		DOWN,
@@ -51,7 +34,6 @@ private:
 	static constexpr uint8_t  _DUTY_STEPS_COUNT = _BLINKER_PERIOD_US / _MAX_DUTY_STEP - 1;
 
 	hw::PWMTimer * _pwm;
-	State _state = State::IDLE;
 	BlinkerDirection _direction = BlinkerDirection::UP;
 	uint8_t rDutyStep = 0;
 	uint8_t gDutyStep = 0;
@@ -59,9 +41,6 @@ private:
 
 	void _increaseIntensity();
 	void _decreaseIntensity();
-	void _processEvent();
-	void _setRedColor();
-	void _setGreenColor();
 
 	void _delay(uint32_t ticks);
 	void _setDutyCycle(uint16_t rDuty, uint16_t gDuty, uint16_t bDuty);

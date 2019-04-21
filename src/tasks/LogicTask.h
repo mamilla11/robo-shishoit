@@ -4,20 +4,20 @@
 #include "base/Message.hpp"
 
 #include <config/TaskConfig.h>
-#include <hw/ModeSwitcher.h>
 #include <hw/Backlight.hpp>
+#include <hw/HandLed.hpp>
 #include <hw/PWMTimer.h>
 #include <hw/Buttons.h>
 #include <hw/Time.h>
+#include <hw/Touch.h>
 
 namespace tasks {
 
 namespace msg {
 
 enum class LogicEvent : uint8_t {
-	IDLE,
-	EYES_SETUP,
-	TIME_SETUP,
+	TOUCH_PRESSED,
+	LEFT_BUTTON_LONG_PRESS,
 	LEFT_BUTTON_PRESSED,
 	RIGHT_BUTTON_PRESSED,
 	UPDATE_TIME,
@@ -40,7 +40,6 @@ public:
 private:
 	enum class State : uint8_t {
 		IDLE,
-		EYES_SETUP,
 		TIME_SETUP
 	};
 
@@ -70,7 +69,7 @@ private:
 	Color _eyesColor = Color::YELLOW;
 	uint8_t _eyesIntensity = 0;
 	State _state = State::IDLE;
-	hw::ModeSwitcher _switcher;
+	hw::Touch _touch;
 	hw::Backlight _backlight;
 	hw::Buttons _buttons;
 	hw::Time _time;
@@ -79,7 +78,7 @@ private:
 
 	void _leftButtonPressedHandler();
 	void _rightButtonPressedHandler();
-
+	void _switchState();
 	void _updateTime();
 	void _displayHours(uint8_t hours, bool dotted = true);
 	void _displayMinutes(uint8_t minutes);
@@ -89,7 +88,6 @@ private:
 
 	void _setEyesColor(Color color);
 	void _setNextEyesColor();
-	void _setEyesIntensity();
 };
 
 }
