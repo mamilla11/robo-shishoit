@@ -8,8 +8,23 @@ Buttons *buttonsPointer;
 static volatile uint8_t leftState = 1;
 static volatile uint8_t rightState = 1;
 
-Buttons::Buttons() {
+Buttons::Buttons()
+{
 	buttonsPointer = this;
+
+	cfg.timer          = config::LONG_PRESS_TIM;
+	cfg.timerPrescaler = config::LONG_PRESS_TIM_PRESCALER;
+	cfg.timerPeriod    = config::LONG_PRESS_TIM_PERIOD;
+	cfg.timerNvic      = config::LONG_PRESS_NVIC;
+	cfg.timerNvicPrio  = config::LONG_PRESS_NVIC_PRIO;
+	cfg.leftBtnPort    = config::BUTTON_LEFT_PORT;
+	cfg.leftBtnPin     = config::BUTTON_LEFT_PIN;
+	cfg.leftBtnExti    = config::BUTTON_LEFT_EXTI;
+	cfg.leftBtnNvic    = config::BUTTONS_NVIC;
+	cfg.rightBtnPort   = config::BUTTON_RIGHT_PORT;
+	cfg.rightBtnPin    = config::BUTTON_RIGHT_PIN;
+	cfg.rightBtnExti   = config::BUTTON_RIGHT_EXTI;
+	cfg.rightBtnNvic   = config::BUTTONS_NVIC;
 
 	_setupGpio();
 	_setupExti();
@@ -17,7 +32,7 @@ Buttons::Buttons() {
 }
 
 bool Buttons::isLeftButtonPressed() {
-	uint16_t isPressed = gpio_get(config::BUTTON_LEFT_PORT, config::BUTTON_LEFT_PIN);
+	uint16_t isPressed = gpio_get(cfg.leftBtnPort, cfg.leftBtnPin);
 	if (isPressed == 0) {
 		return true;
 	}
@@ -25,7 +40,7 @@ bool Buttons::isLeftButtonPressed() {
 }
 
 bool Buttons::isRightButtonPressed() {
-	uint16_t isPressed = gpio_get(config::BUTTON_RIGHT_PORT, config::BUTTON_RIGHT_PIN);
+	uint16_t isPressed = gpio_get(cfg.rightBtnPort, cfg.rightBtnPin);
 	if (isPressed == 0) {
 		return true;
 	}
@@ -35,10 +50,10 @@ bool Buttons::isRightButtonPressed() {
 void Buttons::leftButtonPressedHandler()
 {
 	if (isLeftButtonPressed()) {
-		timer_enable_counter(config::LONG_PRESS_TIM);
+		timer_enable_counter(cfg.timer);
 	} else {
-		timer_set_counter(config::LONG_PRESS_TIM, 0);
-		timer_disable_counter(config::LONG_PRESS_TIM);
+		timer_set_counter(cfg.timer, 0);
+		timer_disable_counter(cfg.timer);
 		if (!_longPressDetected) {
 			_notifyLogicTask(hw::Buttons::Notification::LEFT_PRESSED);
 		} else {
@@ -54,8 +69,8 @@ void Buttons::rightButtonPressedHandler() {
 }
 
 void Buttons::longPressDetectedHandler() {
-	timer_set_counter(config::LONG_PRESS_TIM, 0);
-	timer_disable_counter(config::LONG_PRESS_TIM);
+	timer_set_counter(cfg.timer, 0);
+	timer_disable_counter(cfg.timer);
 
 	_notifyLogicTask(hw::Buttons::Notification::LEFT_LONG_PRESS);
 
@@ -63,36 +78,39 @@ void Buttons::longPressDetectedHandler() {
 }
 
 void Buttons::_setupGpio() {
-	gpio_set_mode(config::BUTTON_LEFT_PORT, GPIO_MODE_INPUT,
-						GPIO_CNF_INPUT_FLOAT, config::BUTTON_LEFT_PIN);
+	gpio_set_mode(cfg.leftBtnPort, GPIO_MODE_INPUT,
+						GPIO_CNF_INPUT_FLOAT, cfg.leftBtnPin);
 
-	gpio_set_mode(config::BUTTON_RIGHT_PORT, GPIO_MODE_INPUT,
-						GPIO_CNF_INPUT_FLOAT, config::BUTTON_RIGHT_PIN);
+	gpio_set_mode(cfg.rightBtnPort, GPIO_MODE_INPUT,
+						GPIO_CNF_INPUT_FLOAT, cfg.rightBtnPin);
 }
 
 void Buttons::_setupExti() {
-	nvic_set_priority(config::BUTTONS_NVIC, 191 + 0x10);
-	nvic_enable_irq(config::BUTTONS_NVIC);
+	nvic_set_priority(cfg.leftBtnNvic, 191 + 0x10);
+	nvic_set_priority(cfg.rightBtnNvic, 191 + 0x10);
 
-	exti_select_source(config::BUTTON_LEFT_PIN, config::BUTTON_LEFT_PORT);
-	exti_set_trigger(config::BUTTON_LEFT_EXTI, EXTI_TRIGGER_BOTH);
-	exti_enable_request(config::BUTTON_LEFT_EXTI);
+	nvic_enable_irq(cfg.leftBtnNvic);
+	nvic_enable_irq(cfg.rightBtnNvic);
 
-	exti_select_source(config::BUTTON_RIGHT_PIN, config::BUTTON_RIGHT_PORT);
-	exti_set_trigger(config::BUTTON_RIGHT_EXTI, EXTI_TRIGGER_BOTH);
-	exti_enable_request(config::BUTTON_RIGHT_EXTI);
+	exti_select_source(cfg.leftBtnPin, cfg.leftBtnPort);
+	exti_set_trigger(cfg.leftBtnExti, EXTI_TRIGGER_BOTH);
+	exti_enable_request(cfg.leftBtnExti);
+
+	exti_select_source(cfg.rightBtnPin, cfg.rightBtnPort);
+	exti_set_trigger(cfg.rightBtnExti, EXTI_TRIGGER_BOTH);
+	exti_enable_request(cfg.rightBtnExti);
 }
 
 void Buttons::_setupTimer() {
-	timer_set_mode(config::LONG_PRESS_TIM, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
-	timer_set_prescaler(config::LONG_PRESS_TIM, 0xFFFE);
-	timer_set_period(config::LONG_PRESS_TIM, 4500);
-	timer_generate_event(config::LONG_PRESS_TIM, TIM_EGR_UG); //update deneration
-	TIM_DIER(config::LONG_PRESS_TIM) |= TIM_DIER_UIE;
-	timer_set_counter(config::LONG_PRESS_TIM, 0);
+	timer_set_mode(cfg.timer, TIM_CR1_CKD_CK_INT, TIM_CR1_CMS_EDGE, TIM_CR1_DIR_UP);
+	timer_set_prescaler(cfg.timer, cfg.timerPrescaler);
+	timer_set_period(cfg.timer, cfg.timerPeriod);
+	timer_generate_event(cfg.timer, TIM_EGR_UG);
+	timer_enable_irq(cfg.timer, TIM_DIER_UIE);
+	timer_set_counter(cfg.timer, 0);
 
-	nvic_set_priority(config::LONG_PRESS_NVIC_2, config::LONG_PRESS_NVIC_PRIO);
-	nvic_enable_irq(config::LONG_PRESS_NVIC_2);
+	nvic_set_priority(cfg.timerNvic, cfg.timerNvicPrio);
+	nvic_enable_irq(cfg.timerNvic);
 }
 
 void Buttons::_notifyLogicTask(Notification notification) {
@@ -116,13 +134,13 @@ void Buttons::_notifyLogicTask(Notification notification) {
 }
 
 void exti15_10_isr(void) {
-	if (exti_get_flag_status(config::BUTTON_LEFT_EXTI)) {
-		exti_reset_request(config::BUTTON_LEFT_EXTI);
+	if (exti_get_flag_status(hw::buttonsPointer->cfg.leftBtnExti)) {
+		exti_reset_request(hw::buttonsPointer->cfg.leftBtnExti);
 		hw::buttonsPointer->leftButtonPressedHandler();
 	}
 
-	if (exti_get_flag_status(config::BUTTON_RIGHT_EXTI)) {
-		exti_reset_request(config::BUTTON_RIGHT_EXTI);
+	if (exti_get_flag_status(hw::buttonsPointer->cfg.rightBtnExti)) {
+		exti_reset_request(hw::buttonsPointer->cfg.rightBtnExti);
 		hw::buttonsPointer->rightButtonPressedHandler();
 	}
 }
@@ -130,7 +148,7 @@ void exti15_10_isr(void) {
 void tim1_up_isr(void) {
 	static bool firstTime = true;
 
-	timer_clear_flag(config::LONG_PRESS_TIM, TIM_SR_UIF);
+	timer_clear_flag(hw::buttonsPointer->cfg.timer, TIM_SR_UIF);
 	if (!firstTime) {
 		hw::buttonsPointer->longPressDetectedHandler();
 	} else {

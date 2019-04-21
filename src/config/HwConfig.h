@@ -39,7 +39,9 @@ static constexpr uint16_t TOUCH_PIN  = GPIO8;
 static constexpr uint32_t TOUCH_NVIC = NVIC_EXTI9_5_IRQ;
 
 static constexpr uint32_t LONG_PRESS_TIM = TIM1;
-static constexpr uint32_t LONG_PRESS_NVIC_2 = NVIC_TIM1_UP_IRQ;
+static constexpr uint32_t LONG_PRESS_TIM_PRESCALER = 0xFFFE;
+static constexpr uint32_t LONG_PRESS_TIM_PERIOD = 4500;
+static constexpr uint32_t LONG_PRESS_NVIC = NVIC_TIM1_UP_IRQ;
 static constexpr uint32_t LONG_PRESS_NVIC_PRIO = 191 + 0x10;
 
 

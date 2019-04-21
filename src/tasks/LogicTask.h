@@ -71,6 +71,7 @@ private:
 	State _state = State::IDLE;
 	hw::Touch _touch;
 	hw::Backlight _backlight;
+	hw::HandLed _handLed;
 	hw::Buttons _buttons;
 	hw::Time _time;
 	uint8_t _hours = 0;

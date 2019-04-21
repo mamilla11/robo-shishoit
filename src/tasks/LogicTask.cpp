@@ -9,11 +9,11 @@ LogicTask::LogicTask() :
 				 config::tasks::LogicTask::PRIORITY),
 				 _touch(hw::Touch()),
 				 _backlight(hw::Backlight()),
+				 _handLed(hw::HandLed()),
 				 _buttons(hw::Buttons()),
 				 _time(hw::Time())
 {
 
-	hw::HandLed();
 	_eyesColorPWM = new hw::PWMTimer(config::EYES_TIM, _EYES_PERIOD_US);
 	_eyesColorPWM->setupChannel(config::EYES_R_PORT, config::EYES_R_PIN, _CHANNEL_R);
 	_eyesColorPWM->setupChannel(config::EYES_G_PORT, config::EYES_G_PIN, _CHANNEL_G);
@@ -52,6 +52,9 @@ void LogicTask:: Run() {
 
 void LogicTask::_leftButtonPressedHandler() {
 	switch (_state) {
+		case State::IDLE:
+			_backlight.toggle();
+			break;
 		case State::TIME_SETUP:
 			_displayNextHour();
 			_saveTime();
@@ -63,6 +66,9 @@ void LogicTask::_leftButtonPressedHandler() {
 
 void LogicTask::_rightButtonPressedHandler() {
 	switch (_state) {
+		case State::IDLE:
+			_handLed.toggle();
+			break;
 		case State::TIME_SETUP:
 			_displayNextMinute();
 			_saveTime();
