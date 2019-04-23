@@ -10,17 +10,10 @@ LogicTask::LogicTask() :
 				 _touch(hw::Touch()),
 				 _backlight(hw::Backlight()),
 				 _handLed(hw::HandLed()),
+				 _eyes(hw::Eyes()),
 				 _buttons(hw::Buttons()),
 				 _time(hw::Time())
 {
-
-	_eyesColorPWM = new hw::PWMTimer(config::EYES_TIM, _EYES_PERIOD_US);
-	_eyesColorPWM->setupChannel(config::EYES_R_PORT, config::EYES_R_PIN, _CHANNEL_R);
-	_eyesColorPWM->setupChannel(config::EYES_G_PORT, config::EYES_G_PIN, _CHANNEL_G);
-	_eyesColorPWM->setupChannel(config::EYES_B_PORT, config::EYES_B_PIN, _CHANNEL_B);
-	_eyesColorPWM->on();
-	_setEyesColor(_eyesColor);
-
 	this->Start();
 }
 
@@ -30,7 +23,7 @@ void LogicTask:: Run() {
 
 		switch (_fifo_data.token) {
 			case msg::LogicEvent::TOUCH_PRESSED:
-				_setNextEyesColor();
+				_eyes.setNextColor();
 				break;
 			case msg::LogicEvent::LEFT_BUTTON_LONG_PRESS:
 				_switchState();
@@ -83,6 +76,7 @@ void LogicTask::_switchState() {
 		_state = State::TIME_SETUP;
 	} else {
 		_state = State::IDLE;
+		_eyes.on();
 	}
 }
 
@@ -90,15 +84,16 @@ void LogicTask::_updateTime() {
 
 	static bool dotted = false;
 
-	if (_state != State::IDLE)
-		return;
+	if (_state == State::IDLE) {
+		_hours = _time.getHours();
+		_minutes = _time.getMinutes();
 
-	_hours = _time.getHours();
-	_minutes = _time.getMinutes();
-
-	_displayHours(_hours, dotted);
-	_displayMinutes(_minutes);
-	dotted = !dotted;
+		_displayHours(_hours, dotted);
+		_displayMinutes(_minutes);
+		dotted = !dotted;
+	} else {
+		_eyes.blink();
+	}
 }
 
 void LogicTask::_displayHours(uint8_t hours, bool dotted) {
@@ -132,57 +127,6 @@ void LogicTask::_displayNextMinute() {
 
 void LogicTask::_saveTime() {
 	_time.setTime(_hours, _minutes);
-}
-
-void LogicTask::_setEyesColor(Color color) {
-	switch (color) {
-		case Color::RED:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, EYES_MAX_DUTY_CYCLE);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, EYES_MAX_DUTY_CYCLE);
-			break;
-		case Color::GREEN:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, EYES_MAX_DUTY_CYCLE);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, EYES_MAX_DUTY_CYCLE);
-			break;
-		case Color::BLUE:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, EYES_MAX_DUTY_CYCLE);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, EYES_MAX_DUTY_CYCLE);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, _eyesIntensity);
-			break;
-		case Color::MAGENTA:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, EYES_MAX_DUTY_CYCLE);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, _eyesIntensity);
-			break;
-		case Color::CYAN:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, EYES_MAX_DUTY_CYCLE);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, _eyesIntensity);
-			break;
-		case Color::YELLOW:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, EYES_MAX_DUTY_CYCLE);
-			break;
-		case Color::WHITE:
-			_eyesColorPWM->setDutyCycle(_CHANNEL_R, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_G, _eyesIntensity);
-			_eyesColorPWM->setDutyCycle(_CHANNEL_B, _eyesIntensity);
-			break;
-		default: break;
-	}
-}
-
-void LogicTask::_setNextEyesColor() {
-	_eyesColor = (Color)((uint8_t)_eyesColor + 1);
-
-	if (_eyesColor == Color::COUNT) {
-		_eyesColor = Color::RED;
-	}
-
-	_setEyesColor(_eyesColor);
 }
 
 }
