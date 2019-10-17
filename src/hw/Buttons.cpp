@@ -1,3 +1,4 @@
+#include <hw/SystemState.h>
 #include "Buttons.h"
 #include <tasks/LogicTask.h>
 
@@ -114,21 +115,17 @@ void Buttons::_setupTimer() {
 }
 
 void Buttons::_notifyLogicTask(Notification notification) {
-	tasks::LogicTask::MsgType msg;
-
 	switch(notification) {
 		case Notification::LEFT_PRESSED:
-			msg.token = tasks::msg::LogicEvent::LEFT_BUTTON_PRESSED;
+			SystemState::pushEvent(SystemState::Event::LEFT_BUTTON_PRESSED);
 			break;
 		case Notification::RIGHT_PRESSED:
-			msg.token = tasks::msg::LogicEvent::RIGHT_BUTTON_PRESSED;
+			SystemState::pushEvent(SystemState::Event::RIGHT_BUTTON_PRESSED);
 			break;
 		case Notification::LEFT_LONG_PRESS:
-			msg.token = tasks::msg::LogicEvent::LEFT_BUTTON_LONG_PRESS;
+			SystemState::pushEvent(SystemState::Event::LEFT_BUTTON_LONG_PRESS);
 			break;
 	}
-
-	tasks::LogicTask::fifo_push_from_isr(&msg);
 }
 
 }

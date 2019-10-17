@@ -13,29 +13,13 @@
 
 namespace tasks {
 
-namespace msg {
-
-enum class LogicEvent : uint8_t {
-	TOUCH_PRESSED,
-	LEFT_BUTTON_LONG_PRESS,
-	LEFT_BUTTON_PRESSED,
-	RIGHT_BUTTON_PRESSED,
-	UPDATE_TIME,
-};
-
-using LogicMessage = base::Event<LogicEvent>;
-
-}
-
-class LogicTask final : public base::TaskBase<config::tasks::LogicTask::NAME,
-		         	 	msg::LogicMessage,
-						config::tasks::LogicTask::FIFO_SIZE> {
+class LogicTask {
 
 public:
 	LogicTask();
 	~LogicTask() = default;
 
-	void Run();
+	void process();
 
 private:
 	enum class State : uint8_t {

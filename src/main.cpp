@@ -6,6 +6,7 @@
 #include <config/FreeRTOSConfig.h>
 #include <config/HwConfig.h>
 #include <config/Clock.hpp>
+#include <hw/SystemState.h>
 
 #include <tasks/BlinkerTask.h>
 #include <tasks/LogicTask.h>
@@ -28,14 +29,14 @@ int main(void)
 	__disable_irq();
 
 	auto logicTask = new tasks::LogicTask();
-	auto blinkerTask = new tasks::BlinkerTask();
-	auto timeTask = new tasks::TimeTask();
-	auto displayTask = new tasks::DisplayTask();
+//	auto blinkerTask = new tasks::BlinkerTask();
+//	auto timeTask = new tasks::TimeTask();
+//	auto displayTask = new tasks::DisplayTask();
 
 
-	rtos::Thread::StartScheduler();
-
-	while(true);
+	while(true) {
+		logicTask->process();
+	}
 	return 0;
 }
 

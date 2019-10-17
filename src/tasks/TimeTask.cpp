@@ -1,3 +1,4 @@
+#include <hw/SystemState.h>
 #include "TimeTask.h"
 #include "LogicTask.h"
 
@@ -16,13 +17,9 @@ void TimeTask::Run()
 	TickType_t delay =
 			rtos::Ticks::MsToTicks(config::tasks::TimeTask::SLEEP_TIME);
 
-	LogicTask::MsgType msg;
-
     while (true) {
         Thread::Delay(delay);
-
-        msg.token = tasks::msg::LogicEvent::UPDATE_TIME;
-        LogicTask::fifo_push_from_isr(&msg);
+        SystemState::pushEvent(SystemState::Event::UPDATE_TIME);
     }
 }
 

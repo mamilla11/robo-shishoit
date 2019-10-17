@@ -1,3 +1,4 @@
+#include <hw/SystemState.h>
 #include "Touch.h"
 #include "tasks/LogicTask.h"
 
@@ -12,9 +13,7 @@ Touch::Touch() {
 }
 
 void Touch::notifyLogicTask() {
-	tasks::LogicTask::MsgType msg;
-	msg.token = tasks::msg::LogicEvent::TOUCH_PRESSED;
-	tasks::LogicTask::fifo_push_from_isr(&msg);
+	SystemState::pushEvent(SystemState::Event::TOUCH_PRESSED);
 }
 
 void Touch::_setup_gpio() {

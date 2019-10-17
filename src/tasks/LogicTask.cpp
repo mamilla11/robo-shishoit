@@ -1,3 +1,4 @@
+#include <hw/SystemState.h>
 #include "LogicTask.h"
 #include "BlinkerTask.h"
 #include "DisplayTask.h"
@@ -5,41 +6,39 @@
 namespace tasks {
 
 LogicTask::LogicTask() :
-		TaskBase(config::tasks::LogicTask::STACK_SIZE,
-				 config::tasks::LogicTask::PRIORITY),
 				 _touch(hw::Touch()),
 				 _backlight(hw::Backlight()),
 				 _handLed(hw::HandLed()),
 				 _eyes(hw::Eyes()),
 				 _buttons(hw::Buttons()),
 				 _time(hw::Time())
-{
-	this->Start();
-}
+{ }
 
-void LogicTask:: Run() {
-	while(true) {
-		_blocking_read();
+void LogicTask::process() {
+	SystemState::Event event = SystemState::popEvent();
 
-		switch (_fifo_data.token) {
-			case msg::LogicEvent::TOUCH_PRESSED:
-				_eyes.setNextColor();
-				break;
-			case msg::LogicEvent::LEFT_BUTTON_LONG_PRESS:
-				_switchState();
-				break;
-			case msg::LogicEvent::LEFT_BUTTON_PRESSED:
-				_leftButtonPressedHandler();
-				break;
-			case msg::LogicEvent::RIGHT_BUTTON_PRESSED:
-				_rightButtonPressedHandler();
-				break;
-			case msg::LogicEvent::UPDATE_TIME:
-				_updateTime();
-				break;
-			default:
-				break;
-		}
+	if (event == SystemState::Event::NONE) {
+		return;
+	}
+
+	switch (event) {
+		case SystemState::Event::TOUCH_PRESSED:
+			_eyes.setNextColor();
+			break;
+		case SystemState::Event::LEFT_BUTTON_LONG_PRESS:
+			_switchState();
+			break;
+		case SystemState::Event::LEFT_BUTTON_PRESSED:
+			_leftButtonPressedHandler();
+			break;
+		case SystemState::Event::RIGHT_BUTTON_PRESSED:
+			_rightButtonPressedHandler();
+			break;
+		case SystemState::Event::UPDATE_TIME:
+			_updateTime();
+			break;
+		default:
+			break;
 	}
 }
 
