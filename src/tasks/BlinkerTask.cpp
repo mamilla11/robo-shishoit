@@ -3,19 +3,13 @@
 
 namespace tasks {
 
-BlinkerTask::BlinkerTask() :
-		Thread(config::tasks::BlinkerTask::NAME,
-			   config::tasks::BlinkerTask::STACK_SIZE,
-			   config::tasks::BlinkerTask::PRIORITY)
+BlinkerTask::BlinkerTask()
  {
-
 	_pwm = new hw::PWMTimer(config::BLINKER_TIM, _BLINKER_PERIOD_US);
 	_pwm->setupChannel(config::BLINKER_R_PORT, config::BLINKER_R_PIN, _CHANNEL_R);
 	_pwm->setupChannel(config::BLINKER_G_PORT, config::BLINKER_G_PIN, _CHANNEL_G);
 	_pwm->setupChannel(config::BLINKER_B_PORT, config::BLINKER_B_PIN, _CHANNEL_B);
 	_pwm->on();
-
-	this->Start();
 }
 
 void BlinkerTask::Run() {
@@ -55,7 +49,7 @@ void BlinkerTask::_decreaseIntensity() {
 }
 
 void BlinkerTask::_delay(uint32_t ticks) {
-	Thread::Delay(ticks);
+	//Thread::Delay(ticks);
 }
 
 void BlinkerTask::_setDutyCycle(uint16_t rDuty, uint16_t gDuty, uint16_t bDuty) {

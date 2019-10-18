@@ -1,9 +1,6 @@
 [submodule "lib/libopencm3"]
 	path = lib/libopencm3
 	url = https://github.com/mamilla11/libopencm3.git
-[submodule "lib/freertos-addons"]
-	path = lib/freertos-addons
-	url = https://github.com/mamilla11/freertos-addons.git
 [submodule "lib/etl"]
 	path = lib/etl
 	url = https://github.com/ETLCPP/etl.git

@@ -1,7 +1,6 @@
 #include <hw/SystemState.h>
 #include "LogicTask.h"
-#include "BlinkerTask.h"
-#include "DisplayTask.h"
+//#include "BlinkerTask.h"
 
 namespace tasks {
 
@@ -11,35 +10,36 @@ LogicTask::LogicTask() :
 				 _handLed(hw::HandLed()),
 				 _eyes(hw::Eyes()),
 				 _buttons(hw::Buttons()),
-				 _time(hw::Time())
+				 _time(hw::Time()),
+				 _display(hw::Display())
 { }
 
 void LogicTask::process() {
 	SystemState::Event event = SystemState::popEvent();
 
-	if (event == SystemState::Event::NONE) {
-		return;
+	if (event != SystemState::Event::NONE) {
+		switch (event) {
+			case SystemState::Event::TOUCH_PRESSED:
+				_eyes.setNextColor();
+				break;
+			case SystemState::Event::LEFT_BUTTON_LONG_PRESS:
+				_switchState();
+				break;
+			case SystemState::Event::LEFT_BUTTON_PRESSED:
+				_leftButtonPressedHandler();
+				break;
+			case SystemState::Event::RIGHT_BUTTON_PRESSED:
+				_rightButtonPressedHandler();
+				break;
+			case SystemState::Event::UPDATE_TIME:
+				_updateTime(); //must be exec every 1s
+				break;
+			default:
+				break;
+		}
 	}
 
-	switch (event) {
-		case SystemState::Event::TOUCH_PRESSED:
-			_eyes.setNextColor();
-			break;
-		case SystemState::Event::LEFT_BUTTON_LONG_PRESS:
-			_switchState();
-			break;
-		case SystemState::Event::LEFT_BUTTON_PRESSED:
-			_leftButtonPressedHandler();
-			break;
-		case SystemState::Event::RIGHT_BUTTON_PRESSED:
-			_rightButtonPressedHandler();
-			break;
-		case SystemState::Event::UPDATE_TIME:
-			_updateTime();
-			break;
-		default:
-			break;
-	}
+	_display.setNextChar(); //maby by timeout (each ms)
 }
 
 void LogicTask::_leftButtonPressedHandler() {
@@ -96,13 +96,13 @@ void LogicTask::_updateTime() {
 }
 
 void LogicTask::_displayHours(uint8_t hours, bool dotted) {
-	DisplayTask::setChar(0, (hours / 10 % 10));
-	DisplayTask::setChar(1, (hours % 10), dotted);
+	_display.setCharValue(0, (hours / 10 % 10));
+	_display.setCharValue(1, (hours % 10), dotted);
 }
 
 void LogicTask::_displayMinutes(uint8_t minutes) {
-	DisplayTask::setChar(2, (minutes / 10 % 10));
-	DisplayTask::setChar(3, (minutes % 10));
+	_display.setCharValue(2, (minutes / 10 % 10));
+	_display.setCharValue(3, (minutes % 10));
 }
 
 void LogicTask::_displayNextHour() {

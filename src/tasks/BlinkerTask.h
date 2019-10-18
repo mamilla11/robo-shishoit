@@ -1,16 +1,10 @@
 #pragma once
 
-#include <thread.hpp>
-#include <ticks.hpp>
-
-#include <config/TaskConfig.h>
 #include <hw/PWMTimer.h>
 
 namespace tasks {
 
-namespace rtos = cpp_freertos;
-
-class BlinkerTask final : rtos::Thread {
+class BlinkerTask {
 public:
 	BlinkerTask();
 	~BlinkerTask() = default;
