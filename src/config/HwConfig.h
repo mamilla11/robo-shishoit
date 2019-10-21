@@ -40,7 +40,7 @@ static constexpr uint32_t TOUCH_NVIC = NVIC_EXTI9_5_IRQ;
 
 static constexpr uint32_t LONG_PRESS_TIM = TIM1;
 static constexpr uint32_t LONG_PRESS_TIM_PRESCALER = 0xFFFE;
-static constexpr uint32_t LONG_PRESS_TIM_PERIOD = 4500;
+static constexpr uint32_t LONG_PRESS_TIM_PERIOD = 2000;
 static constexpr uint32_t LONG_PRESS_NVIC = NVIC_TIM1_UP_IRQ;
 static constexpr uint32_t LONG_PRESS_NVIC_PRIO = 191 + 0x10;
 
@@ -76,15 +76,6 @@ static constexpr uint16_t CHAR_3_SEL_PIN = GPIO13;
 static constexpr uint16_t CHAR_4_SEL_PIN = GPIO8;
 
 static constexpr uint32_t CHAR_SEG_PORT = GPIOA;
-
-static constexpr uint32_t SENSOR_SCL_PORT = GPIOB;
-static constexpr uint32_t SENSOR_SDA_PORT = GPIOB;
-
-static constexpr uint16_t SENSOR_SCL_PIN = GPIO6;
-static constexpr uint16_t SENSOR_SDA_PIN = GPIO7;
-static constexpr uint8_t SENSOR_ADDRESS = 0x40;
-static constexpr uint32_t SENSOR_I2C = I2C1;
-
 
 inline void SWJDisable() {
 	uint32_t remap = AFIO_MAPR_TIM3_REMAP_PARTIAL_REMAP |

@@ -12,7 +12,10 @@ LogicTask::LogicTask() :
 				 _buttons(hw::Buttons()),
 				 _time(hw::Time()),
 				 _display(hw::Display())
-{ }
+{
+	_updateTimeTimer = new hw::TimerMs(hw::TimerMs::TimerMode::CYCLE, 1000);
+	_eyesBlinkTimer = new hw::TimerMs(hw::TimerMs::TimerMode::CYCLE, 250);
+}
 
 void LogicTask::process() {
 	SystemState::Event event = SystemState::popEvent();
@@ -31,12 +34,17 @@ void LogicTask::process() {
 			case SystemState::Event::RIGHT_BUTTON_PRESSED:
 				_rightButtonPressedHandler();
 				break;
-			case SystemState::Event::UPDATE_TIME:
-				_updateTime(); //must be exec every 1s
-				break;
 			default:
 				break;
 		}
+	}
+
+	if (_updateTimeTimer->timeout()) {
+		_updateTime();
+	}
+
+	if ((_eyesBlinkTimer->timeout()) && (_state == State::TIME_SETUP)) {
+		_eyes.blink();
 	}
 
 	_display.setNextChar(); //maby by timeout (each ms)
@@ -90,8 +98,6 @@ void LogicTask::_updateTime() {
 		_displayHours(_hours, dotted);
 		_displayMinutes(_minutes);
 		dotted = !dotted;
-	} else {
-		_eyes.blink();
 	}
 }
 

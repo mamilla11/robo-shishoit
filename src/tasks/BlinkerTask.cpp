@@ -5,51 +5,51 @@ namespace tasks {
 
 BlinkerTask::BlinkerTask()
  {
+	_timerMs = new hw::TimerMs(hw::TimerMs::TimerMode::CYCLE, 20);
+
 	_pwm = new hw::PWMTimer(config::BLINKER_TIM, _BLINKER_PERIOD_US);
 	_pwm->setupChannel(config::BLINKER_R_PORT, config::BLINKER_R_PIN, _CHANNEL_R);
 	_pwm->setupChannel(config::BLINKER_G_PORT, config::BLINKER_G_PIN, _CHANNEL_G);
 	_pwm->setupChannel(config::BLINKER_B_PORT, config::BLINKER_B_PIN, _CHANNEL_B);
 	_pwm->on();
+
+	_setRandomColor();
 }
 
-void BlinkerTask::Run() {
-	while(true) {
-		switch (_direction) {
-			case BlinkerDirection::UP:
-				_increaseIntensity();
-				_direction = BlinkerDirection::DOWN;
-				break;
-			case BlinkerDirection::DOWN:
-				_decreaseIntensity();
-				_direction = BlinkerDirection::UP;
-				break;
-		}
+void BlinkerTask::process() {
+	if (_timerMs->timeout()) {
+		_changeIntensity();
 	}
 }
 
-void BlinkerTask::_increaseIntensity() {
+void BlinkerTask::_setRandomColor() {
 	_setRandomDutySteps();
 	_setDutyCycle(10, 10, 10);
 
 	if (rand() % 2 == 0) {
 		_disableRandomColor();
 	}
+}
 
-	for (uint8_t i = 0; i < _DUTY_STEPS_COUNT; i++) {
+void BlinkerTask::_changeIntensity() {
+	static uint8_t i = 0;
+
+	if (_direction == BlinkerDirection::UP) {
 		_increaseDutyCycle(rDutyStep, gDutyStep, bDutyStep);
-		_delay(_DELAY_BASE_TICKS + i / 4);
-	}
-}
+		i++;
 
-void BlinkerTask::_decreaseIntensity() {
-	for (uint8_t i = _DUTY_STEPS_COUNT; i > 0; i--) {
+		if (i == _DUTY_STEPS_COUNT) {
+			_direction = BlinkerDirection::DOWN;
+		}
+	} else {
 		_decreaseDutyCycle(rDutyStep, gDutyStep, bDutyStep);
-		_delay(_DELAY_BASE_TICKS + i / 4);
-	}
-}
+		i--;
 
-void BlinkerTask::_delay(uint32_t ticks) {
-	//Thread::Delay(ticks);
+		if (i == 0) {
+			_direction = BlinkerDirection::UP;
+			_setRandomColor();
+		}
+	}
 }
 
 void BlinkerTask::_setDutyCycle(uint16_t rDuty, uint16_t gDuty, uint16_t bDuty) {
@@ -92,9 +92,9 @@ void BlinkerTask::_setRandomDutySteps() {
 	gDutyStep = 0;
 	bDutyStep = 0;
 
-	while ((abs(rDutyStep - gDutyStep) < 10) &&
-		   (abs(rDutyStep - bDutyStep) < 10) &&
-		   (abs(gDutyStep - bDutyStep) < 10)) {
+	while ((abs(rDutyStep - gDutyStep) < 5) &&
+		   (abs(rDutyStep - bDutyStep) < 5) &&
+		   (abs(gDutyStep - bDutyStep) < 5)) {
 		rDutyStep = rand() % (_MAX_DUTY_STEP + 1);
 		gDutyStep = rand() % (_MAX_DUTY_STEP + 1);
 		bDutyStep = rand() % (_MAX_DUTY_STEP + 1);

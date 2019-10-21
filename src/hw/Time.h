@@ -2,9 +2,9 @@
 
 #include <config/HwConfig.h>
 
-extern "C" void rtc_isr(void);
-
 namespace hw {
+
+extern "C" void rtc_isr(void);
 
 class Time {
 public:

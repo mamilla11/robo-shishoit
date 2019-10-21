@@ -1,6 +1,7 @@
 #pragma once
 
 #include <hw/PWMTimer.h>
+#include <hw/TimerMs.h>
 
 namespace tasks {
 
@@ -9,7 +10,7 @@ public:
 	BlinkerTask();
 	~BlinkerTask() = default;
 
-	void Run();
+	void process();
 
 private:
 	enum class BlinkerDirection {
@@ -28,15 +29,15 @@ private:
 	static constexpr uint8_t  _DUTY_STEPS_COUNT = _BLINKER_PERIOD_US / _MAX_DUTY_STEP - 1;
 
 	hw::PWMTimer * _pwm;
+	hw::TimerMs  * _timerMs;
 	BlinkerDirection _direction = BlinkerDirection::UP;
 	uint8_t rDutyStep = 0;
 	uint8_t gDutyStep = 0;
 	uint8_t bDutyStep = 0;
 
-	void _increaseIntensity();
-	void _decreaseIntensity();
+	void _setRandomColor();
+	void _changeIntensity();
 
-	void _delay(uint32_t ticks);
 	void _setDutyCycle(uint16_t rDuty, uint16_t gDuty, uint16_t bDuty);
 	void _increaseDutyCycle(uint16_t rDuty, uint16_t gDuty, uint16_t bDuty);
 	void _decreaseDutyCycle(uint16_t rDuty, uint16_t gDuty, uint16_t bDuty);

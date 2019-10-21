@@ -7,6 +7,7 @@
 #include <hw/Time.h>
 #include <hw/Touch.h>
 #include <hw/Display.h>
+#include <hw/TimerMs.h>
 
 namespace tasks {
 
@@ -32,6 +33,8 @@ private:
 	hw::Buttons   _buttons;
 	hw::Time      _time;
 	hw::Display   _display;
+	hw::TimerMs * _updateTimeTimer;
+	hw::TimerMs * _eyesBlinkTimer;
 	uint8_t       _hours = 0;
 	uint8_t       _minutes = 0;
 
