@@ -35,6 +35,7 @@ private:
 	hw::Display   _display;
 	hw::TimerMs * _updateTimeTimer;
 	hw::TimerMs * _eyesBlinkTimer;
+	hw::TimerMs * _pollingButtonsTimer;
 	uint8_t       _hours = 0;
 	uint8_t       _minutes = 0;
 
@@ -42,6 +43,7 @@ private:
 	void _rightButtonPressedHandler();
 	void _switchState();
 	void _updateTime();
+	void _pollingButtons();
 	void _displayHours(uint8_t hours, bool dotted = true);
 	void _displayMinutes(uint8_t minutes);
 	void _displayNextHour();

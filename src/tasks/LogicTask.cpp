@@ -15,6 +15,7 @@ LogicTask::LogicTask() :
 {
 	_updateTimeTimer = new hw::TimerMs(hw::TimerMs::TimerMode::CYCLE, 1000);
 	_eyesBlinkTimer = new hw::TimerMs(hw::TimerMs::TimerMode::CYCLE, 250);
+	_pollingButtonsTimer = new hw::TimerMs(hw::TimerMs::TimerMode::CYCLE, 50);
 }
 
 void LogicTask::process() {
@@ -28,12 +29,6 @@ void LogicTask::process() {
 			case SystemState::Event::LEFT_BUTTON_LONG_PRESS:
 				_switchState();
 				break;
-			case SystemState::Event::LEFT_BUTTON_PRESSED:
-				_leftButtonPressedHandler();
-				break;
-			case SystemState::Event::RIGHT_BUTTON_PRESSED:
-				_rightButtonPressedHandler();
-				break;
 			default:
 				break;
 		}
@@ -45,6 +40,10 @@ void LogicTask::process() {
 
 	if ((_eyesBlinkTimer->timeout()) && (_state == State::TIME_SETUP)) {
 		_eyes.blink();
+	}
+
+	if (_pollingButtonsTimer->timeout()) {
+		_pollingButtons();
 	}
 
 	_display.setNextChar(); //maby by timeout (each ms)
@@ -88,7 +87,6 @@ void LogicTask::_switchState() {
 }
 
 void LogicTask::_updateTime() {
-
 	static bool dotted = false;
 
 	if (_state == State::IDLE) {
@@ -98,6 +96,53 @@ void LogicTask::_updateTime() {
 		_displayHours(_hours, dotted);
 		_displayMinutes(_minutes);
 		dotted = !dotted;
+	}
+}
+
+void LogicTask::_pollingButtons() {
+	static const uint8_t LONG_PRESS_DETECTED_VALUE = 40;
+
+	static bool lButtonPressedPrev = false;
+	static bool rButtonPressedPrev = false;
+
+	static uint8_t lButtonShortPressCounter = 0;
+	static uint8_t rButtonShortPressCounter = 0;
+
+	static uint8_t lButtonLongPressCounter = 0;
+
+	bool rButtonPressedCurr = _buttons.isRightButtonPressed();
+
+	if (rButtonPressedCurr != rButtonPressedPrev) {
+		rButtonPressedPrev = rButtonPressedCurr;
+		rButtonShortPressCounter++;
+	}
+
+	if (rButtonShortPressCounter == 2) {
+		rButtonShortPressCounter = 0;
+		_rightButtonPressedHandler();
+	}
+
+	bool lButtonPressedCurr = _buttons.isLeftButtonPressed();
+
+	if (lButtonPressedCurr != lButtonPressedPrev) {
+		lButtonPressedPrev = lButtonPressedCurr;
+		lButtonShortPressCounter++;
+	}
+
+	if (lButtonShortPressCounter == 2) {
+		lButtonShortPressCounter = 0;
+		if (lButtonLongPressCounter < LONG_PRESS_DETECTED_VALUE) {
+			_leftButtonPressedHandler();
+		}
+		lButtonLongPressCounter = 0;
+	}
+
+	if ((lButtonPressedCurr == lButtonPressedPrev) && (lButtonPressedCurr == true)) {
+		lButtonLongPressCounter++;
+	}
+
+	if (lButtonLongPressCounter == LONG_PRESS_DETECTED_VALUE) {
+		_switchState();
 	}
 }
 
