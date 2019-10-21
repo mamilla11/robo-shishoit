@@ -1,11 +1,8 @@
 #pragma once
 
-#include <hw/Backlight.hpp>
-#include <hw/HandLed.hpp>
+#include <hw/Robo.h>
 #include <hw/Eyes.h>
-#include <hw/Buttons.h>
 #include <hw/Time.h>
-#include <hw/Touch.h>
 #include <hw/Display.h>
 #include <hw/TimerMs.h>
 
@@ -26,11 +23,8 @@ private:
 	};
 
 	State _state = State::IDLE;
-	hw::Touch     _touch;
-	hw::Backlight _backlight;
-	hw::HandLed   _handLed;
+	hw::Robo      _robo;
 	hw::Eyes      _eyes;
-	hw::Buttons   _buttons;
 	hw::Time      _time;
 	hw::Display   _display;
 	hw::TimerMs * _updateTimeTimer;

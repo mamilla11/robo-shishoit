@@ -1,15 +1,10 @@
-#include <hw/SystemState.h>
 #include "LogicTask.h"
-//#include "BlinkerTask.h"
 
 namespace tasks {
 
 LogicTask::LogicTask() :
-				 _touch(hw::Touch()),
-				 _backlight(hw::Backlight()),
-				 _handLed(hw::HandLed()),
+				 _robo(hw::Robo()),
 				 _eyes(hw::Eyes()),
-				 _buttons(hw::Buttons()),
 				 _time(hw::Time()),
 				 _display(hw::Display())
 {
@@ -19,21 +14,6 @@ LogicTask::LogicTask() :
 }
 
 void LogicTask::process() {
-	SystemState::Event event = SystemState::popEvent();
-
-	if (event != SystemState::Event::NONE) {
-		switch (event) {
-			case SystemState::Event::TOUCH_PRESSED:
-				_eyes.setNextColor();
-				break;
-			case SystemState::Event::LEFT_BUTTON_LONG_PRESS:
-				_switchState();
-				break;
-			default:
-				break;
-		}
-	}
-
 	if (_updateTimeTimer->timeout()) {
 		_updateTime();
 	}
@@ -46,13 +26,13 @@ void LogicTask::process() {
 		_pollingButtons();
 	}
 
-	_display.setNextChar(); //maby by timeout (each ms)
+	_display.setNextChar();
 }
 
 void LogicTask::_leftButtonPressedHandler() {
 	switch (_state) {
 		case State::IDLE:
-			_backlight.toggle();
+			_robo.toggleBacklight();
 			break;
 		case State::TIME_SETUP:
 			_displayNextHour();
@@ -66,7 +46,7 @@ void LogicTask::_leftButtonPressedHandler() {
 void LogicTask::_rightButtonPressedHandler() {
 	switch (_state) {
 		case State::IDLE:
-			_handLed.toggle();
+			_robo.toggleHandLed();
 			break;
 		case State::TIME_SETUP:
 			_displayNextMinute();
@@ -102,15 +82,29 @@ void LogicTask::_updateTime() {
 void LogicTask::_pollingButtons() {
 	static const uint8_t LONG_PRESS_DETECTED_VALUE = 40;
 
+	static bool touchPressedPrev   = false;
 	static bool lButtonPressedPrev = false;
 	static bool rButtonPressedPrev = false;
 
+	static uint8_t touchPressCounter        = 0;
 	static uint8_t lButtonShortPressCounter = 0;
 	static uint8_t rButtonShortPressCounter = 0;
 
 	static uint8_t lButtonLongPressCounter = 0;
 
-	bool rButtonPressedCurr = _buttons.isRightButtonPressed();
+	bool touchPressedCurr   = _robo.isTouchPressed();
+
+	if (touchPressedCurr != touchPressedPrev) {
+		touchPressedPrev = touchPressedCurr;
+		touchPressCounter++;
+	}
+
+	if (touchPressCounter == 2) {
+		touchPressCounter = 0;
+		_eyes.setNextColor();
+	}
+
+	bool rButtonPressedCurr = _robo.isRightButtonPressed();
 
 	if (rButtonPressedCurr != rButtonPressedPrev) {
 		rButtonPressedPrev = rButtonPressedCurr;
@@ -122,7 +116,7 @@ void LogicTask::_pollingButtons() {
 		_rightButtonPressedHandler();
 	}
 
-	bool lButtonPressedCurr = _buttons.isLeftButtonPressed();
+	bool lButtonPressedCurr = _robo.isLeftButtonPressed();
 
 	if (lButtonPressedCurr != lButtonPressedPrev) {
 		lButtonPressedPrev = lButtonPressedCurr;
